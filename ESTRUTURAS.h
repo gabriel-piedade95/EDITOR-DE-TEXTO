@@ -140,3 +140,47 @@ void imprimeTexto(){
     }
 
 }
+/* *********************************** */
+
+
+/*********** PILHA DE COMANDO ***********/
+
+
+
+
+/* *********************************** */
+
+/*********** INFORMACAO PROGRAMA ***********/
+
+struct info{
+
+    int lin;
+    int col;
+    int n_linhas;
+    char * nome_arquivo;
+    struct linha * linha_atual;
+
+
+};
+
+struct info * iniciaINFO(){
+
+    struct info * Info = (struct info *)malloc(sizeof(struct info));
+    Info->lin = 0;
+    Info->col = 0;
+    Info->linha_atual = NULL;
+    Info->nome_arquivo = NULL;
+    Info->n_linhas = 0;
+
+    return Info;
+    
+}
+
+void desalocaINFO(struct info * I){
+
+    free(I);
+    return;
+}
+
+
+/* ************************************** */

@@ -21,18 +21,19 @@ void Iteracao_do_Programa(){
     char * s;
     char comando = '0';
     int fecha = 0;
-    int linha= 0;
-    int coluna = 0;
+    struct info * INFO = iniciaINFO();
 
     while(!fecha){
 
-        printf("<%d,%d>", linha, coluna);
+        printf("<%d,%d>", INFO->lin, INFO->col);
         s = le_Entrada();
+       
 
         do{
 
             comando  = s[0];
             s = &s[1];
+            
 
             switch (comando)
             {
@@ -49,6 +50,14 @@ void Iteracao_do_Programa(){
                 abreArquivo(s);
                 imprimeTexto();
                 break;
+
+            case 'F':
+                INFO->col++;
+                break;
+
+            case 'T':
+                break;
+                
             
             default:
                 break;
