@@ -52,7 +52,7 @@ void Iteracao_do_Programa(){
 
                 case '!': //fecha o arquivo
                     fecha = 1;
-                    insereLinhaFim(" ");
+                    //insereLinhaFim(" ");
                     break;
 
                 case 'I':
