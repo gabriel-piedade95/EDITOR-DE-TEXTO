@@ -22,10 +22,11 @@ void Iteracao_do_Programa(){
     char comando = '0';
     int fecha = 0;
     struct info * INFO = iniciaINFO();
+    printf("%d,%d>", INFO->lin, INFO->col);
 
     while(!fecha){
 
-        printf("<%d,%d>", INFO->lin, INFO->col);
+        
         s = le_Entrada();
        
 
@@ -37,7 +38,7 @@ void Iteracao_do_Programa(){
 
             switch (comando)
             {
-            case '!':
+            case '!': //fecha o arquivo
                 fecha = 1;
                 break;
 
@@ -48,21 +49,60 @@ void Iteracao_do_Programa(){
 
             case 'A':
                 abreArquivo(s);
-                imprimeTexto();
+                INFO->linha_atual = cabeca;
+                //INFO->n_linhas = conta_linha();
+                INFO->nome_arquivo = s;
+                s = "";
                 break;
 
             case 'F':
                 INFO->col++;
                 break;
-
             case 'T':
+                if(INFO->col > 0){
+                    INFO->col--;
+                }
                 break;
+
+            case 'O':
+                INFO->col = 0;
+                break;
+
+            case 'P':
+                //proxima palavra
+                break;
+            
+            case 'Q':
+                //inicio da palavra atual
+                break;
+
+            case '$':
+                //fim da linha atual
+                break;
+
+            case ':':
+                if(s[0] == 'F'){
+                    //ultima linha
+                }
+                else{
+                    //linha x
+                }
+
+                break;
+
+            case 'D':
+                //apaga caractere
+                break;
+
+            
                 
             
             default:
                 break;
             }
-
+        printf("%s\n", INFO->linha_atual->lin);
+        printf("^\n\n");
+        printf("%d,%d>", INFO->lin, INFO->col);
 
 
         }while(strlen(s) > 0);
