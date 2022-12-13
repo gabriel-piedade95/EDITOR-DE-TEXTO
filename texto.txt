@@ -1,0 +1,8 @@
+Ola,
+exemplo de texto
+qualquer coisa aqui
+uma linha bem grande com varios caracteres para fazer um teste bem completao assim bem louco sabe 
+mais uma linha
+e nois carai
+teste teste alo testando
+fim.
