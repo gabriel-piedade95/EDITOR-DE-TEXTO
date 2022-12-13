@@ -134,6 +134,27 @@ int inicioPalavra(struct info * I){
 
 }
 
+char * revomeCarectere(struct info * I){
+
+    char * nova_s = malloc(sizeof (char) * I->linha_atual->tam );
+    int pos = 0;
+    int aux = 0;
+    while(pos < I->col){
+        
+        nova_s[pos++] = I->linha_atual->lin[aux++];
+    }
+
+    aux++;
+
+    while(pos < I->linha_atual->tam){
+        
+        nova_s[pos++] = I->linha_atual->lin[aux++];   
+    }
+
+    return nova_s;
+
+}
+
 
 
 /******************************************/

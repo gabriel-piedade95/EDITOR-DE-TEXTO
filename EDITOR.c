@@ -44,7 +44,7 @@ void Iteracao_do_Programa(){
     int fecha = 0;
     struct info * INFO = iniciaINFO();
     INFO->linha_atual = cabeca;
-    
+    int aux_1 = 0;
 
     while(!fecha){
 
@@ -114,17 +114,61 @@ void Iteracao_do_Programa(){
                     break;
 
                 case ':':
+                   
                     if(s[0] == 'F'){
-                        //ultima linha
+                        
+                        if(INFO->lin == INFO->n_linhas -1){
+                            break;
+                        }
+                        
+                        while(INFO->lin < INFO->n_linhas-1){
+                            INFO->linha_atual = INFO->linha_atual->prox;
+                            INFO->lin++;
+                           
+                        }
+                        
                     }
+
                     else{
-                        //linha x
+
+                        aux_1 = atoi(s);
+                        if(aux_1 == INFO->lin){
+
+                        }
+                        else if(aux_1 > INFO->lin){
+
+                            while(INFO->lin < aux_1){
+
+                                
+                                INFO->linha_atual = INFO->linha_atual->prox;
+                                INFO->lin++;
+                                if(INFO->lin == INFO->n_linhas -1){
+                                    break;
+                                }
+                            }
+
+                        }
+                        else{
+
+                            while(INFO->lin > aux_1){
+                                INFO->linha_atual = INFO->linha_atual->ant;
+                                INFO->lin--;
+                           
+                            }
+
+                        }
+
                     }
+
+                    INFO->col = 0;
+                    comando  = s[0];
+                    s = &s[1];
 
                     break;
 
                 case 'D':
-                    //apaga caractere
+                    strcpy(INFO->linha_atual->lin, revomeCarectere(INFO));
+                    INFO->linha_atual->tam--;
                     break;
                 
                 case 'M':
@@ -218,7 +262,7 @@ int main(){
     
     fazabertura();
     Iteracao_do_Programa();
-    imprimeTexto();
+    
     
 
 
