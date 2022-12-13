@@ -123,7 +123,6 @@ void removeLinha(struct linha * L){
 }
 
 
-
 void imprimeLinha(struct linha * L){
 
     printf("%s\n", L->lin);
@@ -158,6 +157,7 @@ struct info{
     int col;
     int n_linhas;
     int col_M;
+    int lin_M;
     char * nome_arquivo;
     struct linha * linha_atual;
 
@@ -170,6 +170,7 @@ struct info * iniciaINFO(){
     Info->lin = 0;
     Info->col = 0;
     Info->col_M = 0;
+    Info->lin_M = 0;
     Info->linha_atual = NULL;
     Info->nome_arquivo = NULL;
     Info->n_linhas = 0;
@@ -186,3 +187,4 @@ void liberaINFO(struct info * I){
 
 
 /* ************************************** */
+

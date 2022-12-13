@@ -19,11 +19,11 @@ void imprimeLinhaAtual(struct info * I){
     
     int i;
     printf("%s\n", I->linha_atual->lin);
-    char s[I->linha_atual->tam];
-    for(i = 0; i < I->linha_atual->tam; i++){
+    char s[I->linha_atual->tam+2];
+    for(i = 0; i < I->linha_atual->tam+2; i++){
         s[i] = ' ';
     }
-    s[I->linha_atual->tam] = '\0';
+    s[I->linha_atual->tam+2] = '\0';
     s[I->col_M] = 'M';
     s[I->col] = '^';
     printf("%s\n\n", s);
@@ -60,7 +60,7 @@ void Iteracao_do_Programa(){
 
             switch (comando){
 
-                case '!': //fecha o arquivo
+                case '!': 
 
                     fecha = 1;
                     break;
@@ -74,7 +74,7 @@ void Iteracao_do_Programa(){
 
                 case 'A':
 
-                    abreArquivo(s, INFO->n_linhas);
+                    INFO->n_linhas = abreArquivo(s);
                     INFO->linha_atual = cabeca;
                     INFO->nome_arquivo = s;
                     s = "";
@@ -110,7 +110,7 @@ void Iteracao_do_Programa(){
                     break;
 
                 case '$':
-                    //fim da linha atual
+                    INFO->col = INFO->linha_atual->tam;
                     break;
 
                 case ':':
@@ -132,6 +132,7 @@ void Iteracao_do_Programa(){
                     INFO->col_M = INFO->col;
                     break;
 
+                /*FAZER*/
                 case 'V':
                     break;
 
@@ -152,14 +153,41 @@ void Iteracao_do_Programa(){
 
                 case 'U':
                     break;
+                /********/
 
                 case 'J':
+                    
+                    if(INFO->lin == INFO->n_linhas - 1){
+                        break;
+                    }
+
+                    INFO->linha_atual = INFO->linha_atual->prox;
+                    INFO->lin = INFO->lin + 1;
+
+                    if(INFO->col > INFO->linha_atual->tam){
+                        INFO->col = INFO->linha_atual->tam;
+                    }
+
+
+                    
                     break;
 
                 case 'H':
+
+                    if(INFO->lin == 0){
+                        break;
+                    }
+
+                    INFO->linha_atual = INFO->linha_atual->ant;
+                    INFO->lin = INFO->lin - 1;
+
+                    if(INFO->col > INFO->linha_atual->tam){
+                        INFO->col = INFO->linha_atual->tam;
+                    }
+
                     break;
 
-                case 'Z':
+                case 'Z'://fazer!!!
                     break;
                 
                 default:
@@ -190,7 +218,7 @@ int main(){
     
     fazabertura();
     Iteracao_do_Programa();
-
+    imprimeTexto();
     
 
 

@@ -51,11 +51,11 @@ char * leLinhaTexto(FILE * arq){
 
     return NULL;
 }
-void abreArquivo(char * nomeArquivo, int tam){
+int abreArquivo(char * nomeArquivo){
 
     FILE * arquivo;
     char * string = NULL;
-
+    int tam = 0;
 
     arquivo = fopen(nomeArquivo, "r");
     if (arquivo == NULL)
@@ -67,6 +67,8 @@ void abreArquivo(char * nomeArquivo, int tam){
     }
     
     fclose(arquivo);
+
+    return tam;
 
 }
 
@@ -131,6 +133,10 @@ int inicioPalavra(struct info * I){
     return posicao + 1;
 
 }
+
+
+
+/******************************************/
 
 void busca_em_texto (char * p, char * t) 
 {
