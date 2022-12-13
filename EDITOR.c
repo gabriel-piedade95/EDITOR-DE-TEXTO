@@ -16,12 +16,22 @@ void fazabertura() {
 
 
 void imprimeLinhaAtual(struct info * I){
-
-
+    
+    int i;
+    printf("%s\n", I->linha_atual->lin);
+    char s[I->linha_atual->tam];
+    for(i = 0; i < I->linha_atual->tam; i++){
+        s[i] = ' ';
+    }
+    s[I->linha_atual->tam] = '\0';
+    s[I->col_M] = 'M';
+    s[I->col] = '^';
+    printf("%s\n\n", s);
         
 }
 
 void fechaPrograma(struct info * I){
+    
     liberaINFO(I);
 }
 
@@ -51,39 +61,48 @@ void Iteracao_do_Programa(){
             switch (comando){
 
                 case '!': //fecha o arquivo
+
                     fecha = 1;
-                   
                     break;
 
                 case 'I':
-                    insereLinhaFim(s);
-                    imprimeTexto();
+                    insereLinhaFim(s);// fazer ainda!!!
+                    INFO->linha_atual = cabeca;
+                    s = "";
+
                     break;
 
                 case 'A':
-                    abreArquivo(s);
+
+                    abreArquivo(s, INFO->n_linhas);
                     INFO->linha_atual = cabeca;
-                    //INFO->n_linhas = conta_linha();
                     INFO->nome_arquivo = s;
                     s = "";
                     break;
 
                 case 'F':
-                    INFO->col++;
+
+                    if(INFO->linha_atual->tam > INFO->col){
+                        INFO->col++;
+                    }
                     break;
+
                 case 'T':
+
                     if(INFO->col > 0){
                         INFO->col--;
                     }
                     break;
 
                 case 'O':
+
                     INFO->col = 0;
                     break;
 
                 case 'P':
-                    //proxima palavra
-                    break;
+                    
+                    INFO->col = proximaPalavra(INFO);
+                    //break;
                 
                 case 'Q':
                     //inicio da palavra atual
@@ -106,7 +125,41 @@ void Iteracao_do_Programa(){
                 case 'D':
                     //apaga caractere
                     break;
+                
+                case 'M':
 
+                    INFO->col_M = INFO->col;
+                    break;
+
+                case 'V':
+                    break;
+
+                case 'C':
+                    break;
+
+                case 'X':
+                    break;
+                
+                case 'B':
+                    break;
+
+                case 'S':
+                    break;
+
+                case 'N':
+                    break;
+
+                case 'U':
+                    break;
+
+                case 'J':
+                    break;
+
+                case 'H':
+                    break;
+
+                case 'Z':
+                    break;
                 
                 default:
                     break;
@@ -117,15 +170,14 @@ void Iteracao_do_Programa(){
                 return;
             }
 
-            printf("%s\n", INFO->linha_atual->lin);
-            printf("^\n\n");
+            
 
 
         }while(strlen(s) > 0);
-   
+        imprimeLinhaAtual(INFO);
     }
     
-    //fechaPrograma(INFO);
+    fechaPrograma(INFO);
     
 
 }
