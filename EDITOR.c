@@ -15,6 +15,17 @@ void fazabertura() {
 }
 
 
+void imprimeLinhaAtual(struct info * I){
+
+
+        
+}
+
+void fechaPrograma(struct info * I){
+    liberaINFO(I);
+}
+
+
 void Iteracao_do_Programa(){
 
 
@@ -22,11 +33,12 @@ void Iteracao_do_Programa(){
     char comando = '0';
     int fecha = 0;
     struct info * INFO = iniciaINFO();
-    printf("%d,%d>", INFO->lin, INFO->col);
+    INFO->linha_atual = cabeca;
+    
 
     while(!fecha){
 
-        
+        printf("%d,%d>", INFO->lin, INFO->col);
         s = le_Entrada();
        
 
@@ -36,80 +48,84 @@ void Iteracao_do_Programa(){
             s = &s[1];
             
 
-            switch (comando)
-            {
-            case '!': //fecha o arquivo
-                fecha = 1;
-                break;
+            switch (comando){
 
-            case 'I':
-                insereLinhaFim(s);
-                imprimeTexto();
-                break;
+                case '!': //fecha o arquivo
+                    fecha = 1;
+                    insereLinhaFim(" ");
+                    break;
 
-            case 'A':
-                abreArquivo(s);
-                INFO->linha_atual = cabeca;
-                //INFO->n_linhas = conta_linha();
-                INFO->nome_arquivo = s;
-                s = "";
-                break;
+                case 'I':
+                    insereLinhaFim(s);
+                    imprimeTexto();
+                    break;
 
-            case 'F':
-                INFO->col++;
-                break;
-            case 'T':
-                if(INFO->col > 0){
-                    INFO->col--;
-                }
-                break;
+                case 'A':
+                    abreArquivo(s);
+                    INFO->linha_atual = cabeca;
+                    //INFO->n_linhas = conta_linha();
+                    INFO->nome_arquivo = s;
+                    s = "";
+                    break;
 
-            case 'O':
-                INFO->col = 0;
-                break;
+                case 'F':
+                    INFO->col++;
+                    break;
+                case 'T':
+                    if(INFO->col > 0){
+                        INFO->col--;
+                    }
+                    break;
 
-            case 'P':
-                //proxima palavra
-                break;
-            
-            case 'Q':
-                //inicio da palavra atual
-                break;
+                case 'O':
+                    INFO->col = 0;
+                    break;
 
-            case '$':
-                //fim da linha atual
-                break;
-
-            case ':':
-                if(s[0] == 'F'){
-                    //ultima linha
-                }
-                else{
-                    //linha x
-                }
-
-                break;
-
-            case 'D':
-                //apaga caractere
-                break;
-
-            
+                case 'P':
+                    //proxima palavra
+                    break;
                 
-            
-            default:
-                break;
+                case 'Q':
+                    //inicio da palavra atual
+                    break;
+
+                case '$':
+                    //fim da linha atual
+                    break;
+
+                case ':':
+                    if(s[0] == 'F'){
+                        //ultima linha
+                    }
+                    else{
+                        //linha x
+                    }
+
+                    break;
+
+                case 'D':
+                    //apaga caractere
+                    break;
+
+                
+                default:
+                    break;
             }
-        printf("%s\n", INFO->linha_atual->lin);
-        printf("^\n\n");
-        printf("%d,%d>", INFO->lin, INFO->col);
+
+            if(fecha == 1){
+                printf("^\n");
+                return;
+            }
+
+            printf("%s\n", INFO->linha_atual->lin);
+            printf("^\n\n");
 
 
         }while(strlen(s) > 0);
    
     }
     
-    
+    //fechaPrograma(INFO);
     
 
 }

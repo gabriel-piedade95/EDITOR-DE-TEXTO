@@ -157,6 +157,7 @@ struct info{
     int lin;
     int col;
     int n_linhas;
+    int col_M;
     char * nome_arquivo;
     struct linha * linha_atual;
 
@@ -168,6 +169,7 @@ struct info * iniciaINFO(){
     struct info * Info = (struct info *)malloc(sizeof(struct info));
     Info->lin = 0;
     Info->col = 0;
+    Info->col_M = 0;
     Info->linha_atual = NULL;
     Info->nome_arquivo = NULL;
     Info->n_linhas = 0;
@@ -176,7 +178,7 @@ struct info * iniciaINFO(){
     
 }
 
-void desalocaINFO(struct info * I){
+void liberaINFO(struct info * I){
 
     free(I);
     return;
