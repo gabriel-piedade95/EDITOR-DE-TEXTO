@@ -101,6 +101,37 @@ int proximaPalavra(struct info * I){
     return posicao + 1;
 }
 
+int inicioPalavra(struct info * I){
+
+    if(I->col == 0){
+        return 0;
+    }
+
+    int posicao = I->col;
+    int aux = 0;
+    char * s = I->linha_atual->lin;
+    char c = s[posicao];
+
+    while(c == ' '){
+        posicao--;
+        c = s[posicao];
+    }
+
+    while(c != ' ' && aux != 1){
+
+        if (c == ' '){
+            aux = 1;
+        }
+        posicao--;
+        c = s[posicao];
+
+    }
+
+
+    return posicao + 1;
+
+}
+
 void busca_em_texto (char * p, char * t) 
 {
    

@@ -102,10 +102,11 @@ void Iteracao_do_Programa(){
                 case 'P':
                     
                     INFO->col = proximaPalavra(INFO);
-                    //break;
+                    break;
                 
                 case 'Q':
-                    //inicio da palavra atual
+                    
+                    INFO->col = inicioPalavra(INFO);
                     break;
 
                 case '$':
