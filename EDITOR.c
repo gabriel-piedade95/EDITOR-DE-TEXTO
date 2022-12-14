@@ -44,7 +44,7 @@ void Iteracao_do_Programa(){
     int fecha = 0;
     struct info * INFO = iniciaINFO();
     INFO->linha_atual = cabeca;
-    int aux_1 = 0;
+    int aux_1;
 
     while(!fecha){
 
@@ -60,7 +60,7 @@ void Iteracao_do_Programa(){
 
             switch (comando){
 
-                case '!': 
+                case '!': //FECHA ARQUIVO
 
                     fecha = 1;
                     break;
@@ -72,7 +72,7 @@ void Iteracao_do_Programa(){
 
                     break;
 
-                case 'A':
+                case 'A'://ABRE ARQUIVO TXT
 
                     INFO->n_linhas = abreArquivo(s);
                     INFO->linha_atual = cabeca;
@@ -80,40 +80,40 @@ void Iteracao_do_Programa(){
                     s = "";
                     break;
 
-                case 'F':
+                case 'F':// MOVE CURSOR PARA A PROXIMA COLUNA
 
                     if(INFO->linha_atual->tam > INFO->col){
                         INFO->col++;
                     }
                     break;
 
-                case 'T':
+                case 'T':// MOVE CURSOR PARA A COLUNA ANTERIOR
 
                     if(INFO->col > 0){
                         INFO->col--;
                     }
                     break;
 
-                case 'O':
+                case 'O':// MOVE CURSOR PARA O INICIO DA LINHA (COLUNA 0)
 
                     INFO->col = 0;
                     break;
 
-                case 'P':
+                case 'P':// MOVE CURSOR PARA O INICIO DA PROXIMA PALAVRA
                     
                     INFO->col = proximaPalavra(INFO);
                     break;
                 
-                case 'Q':
+                case 'Q':// MOVE O CURSOR O INICIO DA PALAVRA ATUAL
                     
                     INFO->col = inicioPalavra(INFO);
                     break;
 
-                case '$':
+                case '$':// MOVE O CURSOR O FIM DA LINHA ATUAL
                     INFO->col = INFO->linha_atual->tam;
                     break;
 
-                case ':':
+                case ':':// MOVE O CURSOR PARA UMA LINHA ESPECIFICA (OU ULTIMA LINHA 'F')
                    
                     if(s[0] == 'F'){
                         
@@ -166,12 +166,13 @@ void Iteracao_do_Programa(){
 
                     break;
 
-                case 'D':
+                case 'D'://DELETA UM CARACTERE
+
                     strcpy(INFO->linha_atual->lin, revomeCarectere(INFO));
                     INFO->linha_atual->tam--;
                     break;
                 
-                case 'M':
+                case 'M': //SALVA A POSICAO ATUAL
 
                     INFO->col_M = INFO->col;
                     break;
@@ -192,14 +193,19 @@ void Iteracao_do_Programa(){
                 case 'S':
                     break;
 
-                case 'N':
+                case 'N'://SEPARA A LINHA
+
+                    insereLinha(INFO->linha_atual, copiaString(INFO->col + 1, INFO->linha_atual->tam, INFO->linha_atual->lin));
+                    strcpy(INFO->linha_atual->lin, copiaString(0, INFO->col + 1, INFO->linha_atual->lin));
+                    INFO->linha_atual->tam = (INFO->linha_atual->tam - INFO->col + 1);
+                    INFO->n_linhas++;
                     break;
 
                 case 'U':
                     break;
                 /********/
 
-                case 'J':
+                case 'J':// MOVE CURSOR PARA A PROXIMA LINHA
                     
                     if(INFO->lin == INFO->n_linhas - 1){
                         break;
@@ -262,7 +268,7 @@ int main(){
     
     fazabertura();
     Iteracao_do_Programa();
-    
+    imprimeTexto();
     
 
 

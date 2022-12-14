@@ -155,6 +155,19 @@ char * revomeCarectere(struct info * I){
 
 }
 
+char * copiaString(int inicio, int fim, char * s){
+
+
+    char * nova_s = malloc(sizeof (char) * (fim - inicio));
+    int i;
+    for (i = 0; i < (fim - inicio); i++){
+        nova_s[i] = s[i + inicio];
+    }
+    nova_s[i] = '\0';
+
+    return nova_s;
+
+}
 
 
 /******************************************/
