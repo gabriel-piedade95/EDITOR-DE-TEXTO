@@ -66,8 +66,11 @@ void Iteracao_do_Programa(){
                     break;
 
                 case 'I':
-                    insereLinhaFim(s);// fazer ainda!!!
-                    INFO->linha_atual = cabeca;
+                    //insereLinhaFim(s);// fazer ainda!!!
+                    //INFO->linha_atual = cabeca;
+
+                    strcpy(INFO->linha_atual->lin, insereString(INFO, s));
+                    INFO->linha_atual->tam = INFO->linha_atual->tam + strlen(s) - 1;
                     s = "";
 
                     break;
@@ -201,7 +204,10 @@ void Iteracao_do_Programa(){
                     INFO->n_linhas++;
                     break;
 
-                case 'U':
+                case 'U'://UNE LINHA ATUAL COM A PROXIMA
+                    strcpy(INFO->linha_atual->lin, somaStrings(INFO->linha_atual->lin, INFO->linha_atual->prox->lin));
+                    removeLinha(INFO->linha_atual->prox);
+                    INFO->n_linhas--;
                     break;
                 /********/
 
@@ -239,6 +245,10 @@ void Iteracao_do_Programa(){
 
                 case 'Z'://fazer!!!
                     break;
+
+                case 'W':
+
+                    imprimeTexto();
                 
                 default:
                     break;
@@ -268,7 +278,7 @@ int main(){
     
     fazabertura();
     Iteracao_do_Programa();
-    imprimeTexto();
+    
     
 
 

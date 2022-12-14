@@ -169,6 +169,39 @@ char * copiaString(int inicio, int fim, char * s){
 
 }
 
+char * somaStrings(char * s1, char * s2){
+
+    char * nova_s = malloc(sizeof (char) * (strlen(s1) + strlen(s2) - 1));
+    int i = 0;
+    int j = 0;
+
+    while(s1[i] != '\0'){
+        nova_s[j] = s1[i];
+        i++; j++;
+    }
+
+    i = 0;
+
+    while(s2[i] != '\0'){
+        nova_s[j] = s2[i];
+        i++; j++;
+    }
+
+    nova_s[j] = '\0';
+
+    return nova_s;
+}
+
+char * insereString(struct info * I, char * s){
+
+    
+    char * aux1 = copiaString(0, I->col + 1, I->linha_atual->lin);
+    char * aux2 = copiaString(I->col + 1, I->linha_atual->tam, I->linha_atual->lin);
+    strcpy(aux1, somaStrings(aux1, s));
+    strcpy(aux2, somaStrings(aux1, aux2));
+
+    return aux2;
+}
 
 /******************************************/
 
