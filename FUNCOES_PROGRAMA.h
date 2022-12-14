@@ -205,20 +205,41 @@ char * insereString(struct info * I, char * s){
 
 /******************************************/
 
-void busca_em_texto (char * p, char * t) 
+int buscaLinha (char * p, char * t) 
 {
    
-   int i, ocorrencias = 0;
+   int i, k;
    int m = strlen(p);
    int n = strlen(t);
-   for (int k = 0; k <= n-m; ++k) {
+   for (k = 0; k <= n-m; ++k) {
       for (i = 0; i < m && p[i] == t[i+k]; i++); 
       if (i == m) {
-        ++ocorrencias;
-        printf("%d\n", k);
+        return k;
       }
    }
+
+   return -1;
    
+}
+
+int buscaTexto(struct info * I, char * s, int * achou){
+
+    struct linha * l_aux = cabeca;
+    int l = I->lin;
+
+    while(l_aux != NULL){
+        *achou = buscaLinha(s, l_aux->lin);
+        l_aux = l_aux->prox;
+        
+        if (*achou != -1){
+            break;
+        }
+        l++;
+    }
+    
+
+    return l;
+
 }
 
 /* Recebe a string b e seu tamanho n, string a e seu tamanho m, string x e seu tamanho p, e uma string nova;
@@ -273,5 +294,7 @@ void substituir(char b[], int n, char a[], int m, char x[], int p, char* nova){
     
  
 }
+
+
 
 /* *************************************** */

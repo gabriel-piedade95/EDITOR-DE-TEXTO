@@ -137,6 +137,7 @@ void imprimeTexto(){
         imprimeLinha(aux);
         aux = aux->prox;
     }
+    
 
 }
 /* *********************************** */
@@ -171,7 +172,7 @@ struct info * iniciaINFO(){
     Info->col = 0;
     Info->col_M = 0;
     Info->lin_M = 0;
-    Info->linha_atual = NULL;
+    Info->linha_atual = cabeca;
     Info->nome_arquivo = NULL;
     Info->n_linhas = 0;
 

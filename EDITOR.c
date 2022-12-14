@@ -43,8 +43,9 @@ void Iteracao_do_Programa(){
     char comando = '0';
     int fecha = 0;
     struct info * INFO = iniciaINFO();
+    int aux_1, aux_2, aux_3;
     INFO->linha_atual = cabeca;
-    int aux_1;
+    
 
     while(!fecha){
 
@@ -66,12 +67,15 @@ void Iteracao_do_Programa(){
                     break;
 
                 case 'I':
-                    //insereLinhaFim(s);// fazer ainda!!!
-                    //INFO->linha_atual = cabeca;
-
-                    strcpy(INFO->linha_atual->lin, insereString(INFO, s));
-                    INFO->linha_atual->tam = INFO->linha_atual->tam + strlen(s) - 1;
-                    s = "";
+                    if(0){// fazer ainda!!!
+                        insereLinhaFim(s);
+                        INFO->linha_atual = cabeca;
+                    }
+                    else{
+                        strcpy(INFO->linha_atual->lin, insereString(INFO, s));
+                        INFO->linha_atual->tam = INFO->linha_atual->tam + strlen(s) - 1;
+                        s = "";
+                    }
 
                     break;
 
@@ -92,9 +96,11 @@ void Iteracao_do_Programa(){
 
                 case 'T':// MOVE CURSOR PARA A COLUNA ANTERIOR
 
-                    if(INFO->col > 0){
-                        INFO->col--;
+                    if(INFO->col == 0){
+                        
+                        break;
                     }
+                    INFO->col--;
                     break;
 
                 case 'O':// MOVE CURSOR PARA O INICIO DA LINHA (COLUNA 0)
@@ -190,12 +196,33 @@ void Iteracao_do_Programa(){
                 case 'X':
                     break;
                 
-                case 'B':
+                case 'B'://BUSCA PALAVRA NO TEXTO
+    
+                    aux_3 = -1;
+                    aux_2 = buscaTexto(INFO, s, &aux_3);
+                    
+                    
+                    if(aux_3 >=  INFO->col && aux_2 >= INFO->lin){
+
+                        INFO->col = aux_3;
+
+                        while(INFO->lin < aux_2){
+                            INFO->linha_atual = INFO->linha_atual->prox;
+                            INFO->lin++;
+                            if(INFO->lin == INFO->n_linhas -1){
+                                    break;
+                                }
+                        }
+                    }
+                    
+                    
+                    s = "";
                     break;
 
                 case 'S':
                     break;
-
+                /**********/
+                
                 case 'N'://SEPARA A LINHA
 
                     insereLinha(INFO->linha_atual, copiaString(INFO->col + 1, INFO->linha_atual->tam, INFO->linha_atual->lin));
@@ -205,11 +232,12 @@ void Iteracao_do_Programa(){
                     break;
 
                 case 'U'://UNE LINHA ATUAL COM A PROXIMA
+
                     strcpy(INFO->linha_atual->lin, somaStrings(INFO->linha_atual->lin, INFO->linha_atual->prox->lin));
                     removeLinha(INFO->linha_atual->prox);
                     INFO->n_linhas--;
                     break;
-                /********/
+                
 
                 case 'J':// MOVE CURSOR PARA A PROXIMA LINHA
                     
@@ -246,9 +274,18 @@ void Iteracao_do_Programa(){
                 case 'Z'://fazer!!!
                     break;
 
-                case 'W':
+                case 'W'://IMPRIME A VERSAO ATUAL DO TEXTO
 
                     imprimeTexto();
+                    printf("\n\n");
+                    break;
+
+                case '?':
+                    break;
+
+                case 'K':
+
+                    break;
                 
                 default:
                     break;
