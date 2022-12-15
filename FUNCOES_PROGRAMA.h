@@ -36,13 +36,18 @@ char * leLinhaTexto(FILE * arq){
     int letra;
     size_t s = 0 , tam = 0;
 
-    while ((letra=fgetc(arq)) != EOF && letra != '\n') {
+    while ((letra=fgetc(arq)) != EOF) {
         if (tam + 1 >= s)
         {
             s = s * 2 + 1;
             string = realloc(string, sizeof(char)*s);
         }
-        string[tam++] = letra;
+        if(letra == '\n'){
+            break;
+        }
+        string[tam++] = letra; 
+        
+        
     }
     if (string != NULL) {
         string[tam] = '\0';
@@ -58,10 +63,15 @@ int abreArquivo(char * nomeArquivo){
     int tam = 0;
 
     arquivo = fopen(nomeArquivo, "r");
-    if (arquivo == NULL)
+    if (arquivo == NULL){
+        printf("ERRO: Arquivo nao encontrado!\n");
         exit(1);
+    }
+        
+        
 
     while((string = leLinhaTexto(arquivo)) != NULL){
+        
         insereLinhaFim(string);
         tam++;
     }
@@ -70,6 +80,25 @@ int abreArquivo(char * nomeArquivo){
 
     return tam;
 
+}
+
+void escreveArquivo(char * nomeArquivo){
+
+    FILE * arquivo;
+    struct linha * aux = cabeca;
+
+    arquivo = fopen(nomeArquivo, "w");
+    
+
+    while(aux != NULL){
+        
+        fprintf(arquivo, "%s", aux->lin);
+        aux = aux->prox;
+    }
+    
+    fclose(arquivo);
+
+    
 }
 
 /* *************************************** */
@@ -239,7 +268,21 @@ int buscaTexto(struct info * I, char * s, int * achou){
     
 
     return l;
+}
 
+void separaString(char * s, char * aux1, char * aux2){
+
+    int tam_s = strlen(s);
+    int pos;
+
+    pos = buscaLinha("/", s);
+    aux1 = copiaString(0, pos, s);
+    aux2 = copiaString(pos + 1, tam_s, s);
+
+    
+    printf("%s %s\n", aux1, aux2);
+
+    
 }
 
 /* Recebe a string b e seu tamanho n, string a e seu tamanho m, string x e seu tamanho p, e uma string nova;
@@ -296,5 +339,10 @@ void substituir(char b[], int n, char a[], int m, char x[], int p, char* nova){
 }
 
 
+/* **************
+char * substituiString(struct info * I, char * a, char * b){
 
-/* *************************************** */
+
+}
+
+************************* */

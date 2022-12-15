@@ -29,7 +29,6 @@ void imprimeLinhaAtual(struct info * I){
     printf("%s\n\n", s);
         
 }
-
 void fechaPrograma(struct info * I){
     
     liberaINFO(I);
@@ -39,13 +38,13 @@ void fechaPrograma(struct info * I){
 void Iteracao_do_Programa(){
 
 
-    char * s;
+    char * s; char * s_aux_1; char * s_aux_2;
     char comando = '0';
-    int fecha = 0;
+    int fecha = 0; int aux_1, aux_2, aux_3;
     struct info * INFO = iniciaINFO();
-    int aux_1, aux_2, aux_3;
-    INFO->linha_atual = cabeca;
     
+    INFO->linha_atual = cabeca;
+    //struct linha * PILHA = criaLinha();
 
     while(!fecha){
 
@@ -84,6 +83,12 @@ void Iteracao_do_Programa(){
                     INFO->n_linhas = abreArquivo(s);
                     INFO->linha_atual = cabeca;
                     INFO->nome_arquivo = s;
+                    s = "";
+                    break;
+
+                case 'E':
+
+                    escreveArquivo(s);
                     s = "";
                     break;
 
@@ -195,7 +200,9 @@ void Iteracao_do_Programa(){
 
                 case 'X':
                     break;
-                
+
+                /**********/
+
                 case 'B'://BUSCA PALAVRA NO TEXTO
     
                     aux_3 = -1;
@@ -220,8 +227,13 @@ void Iteracao_do_Programa(){
                     break;
 
                 case 'S':
+
+                    s_aux_1 = " ";
+                    s_aux_2 = " ";
+                    separaString(s, s_aux_1, s_aux_2);
+                    printf("%s %spppp12\n", s_aux_1, s_aux_2);
                     break;
-                /**********/
+                
                 
                 case 'N'://SEPARA A LINHA
 
