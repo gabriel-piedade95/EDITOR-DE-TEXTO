@@ -5,7 +5,6 @@
 #include "FUNCOES_PROGRAMA.h"
 
 
-
 void fazabertura() {
 
 	printf("****************************\n");
@@ -38,13 +37,13 @@ void fechaPrograma(struct info * I){
 void Iteracao_do_Programa(){
 
 
-    char * s; char * s_aux_1; char * s_aux_2;
+    char * s; char * s_aux_1; char * s_aux_2; char * s_aux_3;
     char comando = '0';
     int fecha = 0; int aux_1, aux_2, aux_3;
     struct info * INFO = iniciaINFO();
     
     INFO->linha_atual = cabeca;
-    //struct linha * PILHA = criaLinha();
+    
 
     while(!fecha){
 
@@ -65,21 +64,24 @@ void Iteracao_do_Programa(){
                     fecha = 1;
                     break;
 
-                case 'I':
-                    if(0){// fazer ainda!!!
+                case 'I'://INSERE LINHA
+
+                    if(INFO->nome_arquivo == NULL){
                         insereLinhaFim(s);
                         INFO->linha_atual = cabeca;
                     }
                     else{
                         strcpy(INFO->linha_atual->lin, insereString(INFO, s));
                         INFO->linha_atual->tam = INFO->linha_atual->tam + strlen(s) - 1;
-                        s = "";
+                        
                     }
 
+                    s = "";
                     break;
 
                 case 'A'://ABRE ARQUIVO TXT
 
+                    apagaTexto();
                     INFO->n_linhas = abreArquivo(s);
                     INFO->linha_atual = cabeca;
                     INFO->nome_arquivo = s;
@@ -146,10 +148,8 @@ void Iteracao_do_Programa(){
                     else{
 
                         aux_1 = atoi(s);
-                        if(aux_1 == INFO->lin){
-
-                        }
-                        else if(aux_1 > INFO->lin){
+                        
+                        if(aux_1 > INFO->lin){
 
                             while(INFO->lin < aux_1){
 
@@ -189,16 +189,42 @@ void Iteracao_do_Programa(){
                 case 'M': //SALVA A POSICAO ATUAL
 
                     INFO->col_M = INFO->col;
+                    INFO->lin_M = INFO->lin;
                     break;
 
                 /*FAZER*/
                 case 'V':
+                    if(topo != NULL){
+
+                        s_aux_3 = Desempilha();
+                        if(s_aux_3 != NULL){
+
+                            strcpy(INFO->linha_atual->lin, insereString(INFO, s_aux_3));
+                            INFO->linha_atual->tam = INFO->linha_atual->tam + strlen(s_aux_3) - 1;
+                        }
+                        
+                    }
+                    
+                    s = "";
                     break;
 
                 case 'C':
+
+                    if(INFO->col_M > INFO->col){
+                        Empilha(copiaString(INFO->col_M, INFO->linha_atual->tam ,INFO->linha_atual->lin));
+                    }
+                    else{
+                        Empilha(copiaString(INFO->col_M, INFO->col ,INFO->linha_atual->lin));
+                    }
+                    
+                    s = "";
                     break;
 
                 case 'X':
+                    while(topo != NULL){
+                        insereLinhaFim(Desempilha());
+                    }
+                    s = "";
                     break;
 
                 /**********/
@@ -226,12 +252,32 @@ void Iteracao_do_Programa(){
                     s = "";
                     break;
 
-                case 'S':
+                case 'S'://terminar
 
                     s_aux_1 = " ";
                     s_aux_2 = " ";
-                    separaString(s, s_aux_1, s_aux_2);
-                    printf("%s %spppp12\n", s_aux_1, s_aux_2);
+                    s_aux_3 = "\0";
+                    s_aux_3 =  realloc(s_aux_3, sizeof(char)*INFO->linha_atual->tam);
+                    separaString(s, &s_aux_1, &s_aux_2);
+                    strcpy(s_aux_3, substituiStringLinha(INFO, s_aux_1, s_aux_2));
+                    printf("%s || oo \n", s_aux_3);
+                    strcpy(INFO->linha_atual->lin,substituiStringLinha(INFO, s_aux_1, s_aux_2));
+                    
+
+                    /*
+                    while(INFO->lin < INFO->n_linhas-1){
+
+                        
+
+                        strcpy(INFO->linha_atual->lin, substituiStringLinha(INFO, s_aux_1, s_aux_2));
+                        INFO->linha_atual = INFO->linha_atual->prox;
+                        INFO->lin++;
+                           
+                    }
+                    
+                    */
+                    
+                    s = "";
                     break;
                 
                 
@@ -283,7 +329,9 @@ void Iteracao_do_Programa(){
 
                     break;
 
-                case 'Z'://fazer!!!
+                case 'Z':
+                    mostraPilha();
+                    s = "";
                     break;
 
                 case 'W'://IMPRIME A VERSAO ATUAL DO TEXTO

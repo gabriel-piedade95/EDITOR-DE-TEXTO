@@ -94,11 +94,7 @@ void insereLinhaFim(char * string){
     return;
 }
 
-void liberaLinha(struct linha * L){
 
-    free(L->lin);
-    free(L);
-}
 
 void removeLinha(struct linha * L){
 
@@ -117,11 +113,10 @@ void removeLinha(struct linha * L){
         L->ant->prox = L->prox;
     }
 
-    liberaLinha(L);
+    free(L);
     return;
 
 }
-
 
 void imprimeLinha(struct linha * L){
 
@@ -140,13 +135,78 @@ void imprimeTexto(){
     
 
 }
+
+void apagaTexto(){
+
+    struct linha * aux = cabeca;
+
+    while(aux != NULL){
+        
+        struct linha * prox = aux->prox;
+        free(aux);
+        aux = prox;
+    }
+
+    cabeca = NULL;
+    
+}
 /* *********************************** */
 
 
 /*********** PILHA  ***********/
 
+struct noh
+{
+    char * lin;
+    struct noh * prox;
+    
+};
+
+struct noh * topo = NULL;
 
 
+void Empilha(char * s){
+
+    struct noh * N = (struct noh *) malloc(sizeof (struct noh));
+    N->lin = s;
+
+    if(topo == NULL){
+        N->prox = NULL;
+    }
+    else{
+        N->prox = topo;
+    }
+    topo = N;
+    
+}
+
+char * Desempilha(){
+    
+    char * s = NULL;
+    if(topo != NULL){
+        struct noh * aux = topo;
+        s = topo->lin;
+        topo = topo->prox;
+        free(aux);
+    }
+    return s;
+}
+
+void mostraPilha(){
+
+    
+    if(topo != NULL){
+
+        struct noh * aux = topo;
+        while(aux != NULL){
+
+            printf("%s\n", aux->lin);
+            aux = aux->prox;
+
+        }
+        
+    }
+}
 
 /* *********************************** */
 

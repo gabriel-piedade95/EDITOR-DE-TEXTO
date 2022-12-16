@@ -92,14 +92,17 @@ void escreveArquivo(char * nomeArquivo){
 
     while(aux != NULL){
         
-        fprintf(arquivo, "%s", aux->lin);
+        fprintf(arquivo, "%s\n", aux->lin);
         aux = aux->prox;
+        
     }
     
     fclose(arquivo);
 
     
 }
+
+
 
 /* *************************************** */
 
@@ -270,79 +273,37 @@ int buscaTexto(struct info * I, char * s, int * achou){
     return l;
 }
 
-void separaString(char * s, char * aux1, char * aux2){
+void separaString(char * s, char ** aux1, char ** aux2){
 
     int tam_s = strlen(s);
     int pos;
 
     pos = buscaLinha("/", s);
-    aux1 = copiaString(0, pos, s);
-    aux2 = copiaString(pos + 1, tam_s, s);
+    *aux1 = copiaString(0, pos, s);
+    *aux2 = copiaString(pos + 1, tam_s, s);
 
-    
-    printf("%s %s\n", aux1, aux2);
-
-    
 }
 
-/* Recebe a string b e seu tamanho n, string a e seu tamanho m, string x e seu tamanho p, e uma string nova;
-   Altere essa funcao para que ela coloque em nova o resultado de substituir em b as ocorrencias de a por x. */
-void substituir(char b[], int n, char a[], int m, char x[], int p, char* nova){
-    
-    int pivo1, pivo2, pivo_a, pivo_nova, tam;
-    
-    pivo1 = 0;
-    tam = 0;
-    pivo_a = 0;
-    pivo_nova = 0;
-    
-    //encontra a posicao de onde deve ser trocado
-    
-    while(pivo1 < n){
+
+char * substituiStringLinha(struct info * I, char * a, char * b){
+
+    char * s = I->linha_atual->lin;
+    int pos = buscaLinha(a, s);
+
+    if(pos != -1){
+        char * aux1 = copiaString(0, pos, s);
+        char * aux2 = copiaString(pos + strlen(a), strlen(s), s);
+
         
+
+        strcpy(aux1, somaStrings(aux1, b));
+        strcpy(aux2, somaStrings(aux1, aux2));
         
-        for(pivo2 = pivo1, pivo_a = 0; pivo2 < (pivo1 + m); pivo2++, pivo_a++){
-            
-            if(b[pivo2] == a[pivo_a]){
-                tam++;
-                
-            }
-            
-            
-        }
-        
-        if(tam == m){
-            
-            strcpy(&nova[pivo_nova], x);
-            pivo_nova += p;
-            pivo1 += m;
-            n += (p-m) + 1;
-            
-            
-        }
-        
-        else{
-            
-            
-            nova[pivo_nova] = b[pivo1];
-            pivo_nova++;
-            pivo1++;
-            
-        }
-        tam = 0;
-        
+        return aux2;
     }
+
+    return "\0";
     
-    nova[pivo1] = '\0';
-    
- 
-}
-
-
-/* **************
-char * substituiString(struct info * I, char * a, char * b){
-
 
 }
 
-************************* */
