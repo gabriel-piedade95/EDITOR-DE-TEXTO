@@ -63,8 +63,9 @@ int abreArquivo(char * nomeArquivo){
     int tam = 0;
 
     arquivo = fopen(nomeArquivo, "r");
+
     if (arquivo == NULL){
-        printf("ERRO: Arquivo nao encontrado!\n");
+        printf("ERRO:  Arquivo '%s' nao encontrado!\n", nomeArquivo);
         exit(1);
     }
         
@@ -224,6 +225,15 @@ char * somaStrings(char * s1, char * s2){
     return nova_s;
 }
 
+void removeString(int inicio, int fim, char * s){
+
+    char * aux1 = copiaString(0, inicio + 1, s);
+    char * aux2 = copiaString(fim, strlen(s), s);
+    strcpy(s, somaStrings(aux1, aux2));
+    
+
+}
+
 char * insereString(struct info * I, char * s){
 
     
@@ -307,3 +317,45 @@ char * substituiStringLinha(struct info * I, char * a, char * b){
 
 }
 
+void informacao(){
+
+    printf("\n~> LISTA DE COMANDOS <~\n\n");
+
+    printf("MANIPULACAO ARQUIVO:\n");
+    printf("An -> Carrega o conteudo do arquivo de texto de nome n no editor\n");
+    printf("En -> (Sobre)escreve o conteudo do editor no arquivo de texto de nome n\n\n");
+
+    printf("MOVIMENTO CURSOR:\n");
+    printf("F -> Move o cursor um caractere a frente\n");
+    printf("T -> Move o cursor um caractere para tras\n");
+    printf("0 -> Move o cursor para o inicio da linha atual\n");
+    printf("P -> Move cursor para inicio da proxima palavra (dentro da mesma linha)\n");
+    printf("Q -> Move cursor para inicio da palavra atual\n");
+    printf("$ -> Move o cursor para o fim da linha atual\n");
+    printf(":x -> Move o cursor para o inicio da linha x\n");
+    printf(":F -> Move o cursor para a ultima linha do arquivo\n");
+    printf("J -> Ir para proxima linha \n");
+    printf("H -> Ir para a linha anterior\n\n");
+
+    printf("MANIPULACAO STRING:\n");
+    printf("Is -> Insere a string s na posicao atual do texto\n");
+    printf("D -> Apaga o caractere da posicao atual\n");
+    printf("Ss/r -> Substitui toda ocorrencia de s por r no texto a partir da posicao atual\n");
+    printf("Bs -> Busca pela proxima ocorrencia do padrao s no texto\n");
+    printf("N -> Separa linha atual na posicao do cursor\n");
+    printf("U -> Unir linha atual e a proxima\n\n");
+
+    printf("PILHA STRING\n");
+    printf("V -> Desempilha e insere o conteudo do topo pilha na posicao atual\n");
+    printf("C -> Empilha o texto entre a posicao marcada e a posicao atual \n");
+    printf("X -> Empilha o texto entre a posicao marcada e a posicao atual e o deleta\n");
+    printf("M -> Marca a posicao atual do cursor\n\n");
+
+
+    printf("PROGRAMA:\n");
+    printf("! -> Encerra o programa\n");
+    printf("Z -> Exibe a pilha de memoria, comecando pelo topo\n");
+    printf("W -> Imprime versao atual do texto\n");
+    printf("K -> Imprime informacoes sobre o texto\n\n\n");
+
+}

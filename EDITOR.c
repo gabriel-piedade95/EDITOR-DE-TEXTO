@@ -7,9 +7,12 @@
 
 void fazabertura() {
 
-	printf("****************************\n");
-	printf("*      EDITOR DE TEXTO     *\n");
-	printf("****************************\n");
+	printf("****************************************************************\n");
+    printf("*                                                              *\n");
+	printf("*            ***      *EDITOR DE TEXTO*      ***               *\n");
+    printf("*                                                              *\n");
+	printf("****************************************************************\n");
+    printf("by GABRIEL PIEDADE - nUSP8927356\nAperte ? para ver a lista de comandos\n");
 	printf("\n");
 }
 
@@ -17,21 +20,35 @@ void fazabertura() {
 void imprimeLinhaAtual(struct info * I){
     
     int i;
-    printf("%s\n", I->linha_atual->lin);
-    char s[I->linha_atual->tam+2];
-    for(i = 0; i < I->linha_atual->tam+2; i++){
-        s[i] = ' ';
+    if(I->linha_atual == NULL){
+
+        printf("\n");
+        printf("^\n\n");
+
     }
-    s[I->linha_atual->tam+2] = '\0';
-    s[I->col_M] = 'M';
-    s[I->col] = '^';
-    printf("%s\n\n", s);
+    else{
+
+        printf("%s\n", I->linha_atual->lin);
+        char s[I->linha_atual->tam+2];
+        for(i = 0; i < I->linha_atual->tam+2; i++){
+            s[i] = ' ';
+        }
+        s[I->linha_atual->tam+2] = '\0';
+        s[I->col_M] = 'M';
+        s[I->col] = '^';
+        printf("%s\n\n", s);
+    }
+    
         
 }
 void fechaPrograma(struct info * I){
     
     liberaINFO(I);
+    apagaPilha();
+    apagaTexto();
+
 }
+
 
 
 void Iteracao_do_Programa(){
@@ -43,7 +60,6 @@ void Iteracao_do_Programa(){
     struct info * INFO = iniciaINFO();
     
     INFO->linha_atual = cabeca;
-    
 
     while(!fecha){
 
@@ -64,7 +80,7 @@ void Iteracao_do_Programa(){
                     fecha = 1;
                     break;
 
-                case 'I'://INSERE LINHA
+                case 'I'://INSERE LINHA...terminar
 
                     if(INFO->nome_arquivo == NULL){
                         insereLinhaFim(s);
@@ -85,12 +101,14 @@ void Iteracao_do_Programa(){
                     INFO->n_linhas = abreArquivo(s);
                     INFO->linha_atual = cabeca;
                     INFO->nome_arquivo = s;
+
                     s = "";
                     break;
 
-                case 'E':
+                case 'E'://ESCREVE ARQUIVO TXT (SALVAR)
 
                     escreveArquivo(s);
+
                     s = "";
                     break;
 
@@ -99,6 +117,7 @@ void Iteracao_do_Programa(){
                     if(INFO->linha_atual->tam > INFO->col){
                         INFO->col++;
                     }
+
                     break;
 
                 case 'T':// MOVE CURSOR PARA A COLUNA ANTERIOR
@@ -108,25 +127,31 @@ void Iteracao_do_Programa(){
                         break;
                     }
                     INFO->col--;
+
                     break;
 
                 case 'O':// MOVE CURSOR PARA O INICIO DA LINHA (COLUNA 0)
 
                     INFO->col = 0;
+
                     break;
 
                 case 'P':// MOVE CURSOR PARA O INICIO DA PROXIMA PALAVRA
                     
                     INFO->col = proximaPalavra(INFO);
+
                     break;
                 
                 case 'Q':// MOVE O CURSOR O INICIO DA PALAVRA ATUAL
                     
                     INFO->col = inicioPalavra(INFO);
+
                     break;
 
                 case '$':// MOVE O CURSOR O FIM DA LINHA ATUAL
+
                     INFO->col = INFO->linha_atual->tam;
+
                     break;
 
                 case ':':// MOVE O CURSOR PARA UMA LINHA ESPECIFICA (OU ULTIMA LINHA 'F')
@@ -175,6 +200,7 @@ void Iteracao_do_Programa(){
                     }
 
                     INFO->col = 0;
+
                     comando  = s[0];
                     s = &s[1];
 
@@ -184,16 +210,19 @@ void Iteracao_do_Programa(){
 
                     strcpy(INFO->linha_atual->lin, revomeCarectere(INFO));
                     INFO->linha_atual->tam--;
+
                     break;
                 
                 case 'M': //SALVA A POSICAO ATUAL
 
                     INFO->col_M = INFO->col;
                     INFO->lin_M = INFO->lin;
+
                     break;
 
-                /*FAZER*/
-                case 'V':
+                
+                case 'V'://DESEMPILHA
+
                     if(topo != NULL){
 
                         s_aux_3 = Desempilha();
@@ -208,7 +237,7 @@ void Iteracao_do_Programa(){
                     s = "";
                     break;
 
-                case 'C':
+                case 'C'://EMPILHA
 
                     if(INFO->col_M > INFO->col){
                         Empilha(copiaString(INFO->col_M, INFO->linha_atual->tam ,INFO->linha_atual->lin));
@@ -220,10 +249,19 @@ void Iteracao_do_Programa(){
                     s = "";
                     break;
 
-                case 'X':
-                    while(topo != NULL){
-                        insereLinhaFim(Desempilha());
+                case 'X'://terminar...
+
+                    if(INFO->col_M > INFO->col){
+                        Empilha(copiaString(INFO->col_M, INFO->linha_atual->tam ,INFO->linha_atual->lin));
+                        removeString(INFO->col_M, INFO->linha_atual->tam ,INFO->linha_atual->lin);
+                        INFO->linha_atual->tam -= (INFO->linha_atual->tam - INFO->col_M);
                     }
+                    else{
+                        Empilha(copiaString(INFO->col_M, INFO->col ,INFO->linha_atual->lin));
+                        removeString(INFO->col_M, INFO->col ,INFO->linha_atual->lin);
+                        INFO->linha_atual->tam -= (INFO->col_M - INFO->col);
+                    }
+                    
                     s = "";
                     break;
 
@@ -287,6 +325,7 @@ void Iteracao_do_Programa(){
                     strcpy(INFO->linha_atual->lin, copiaString(0, INFO->col + 1, INFO->linha_atual->lin));
                     INFO->linha_atual->tam = (INFO->linha_atual->tam - INFO->col + 1);
                     INFO->n_linhas++;
+
                     break;
 
                 case 'U'://UNE LINHA ATUAL COM A PROXIMA
@@ -294,12 +333,14 @@ void Iteracao_do_Programa(){
                     strcpy(INFO->linha_atual->lin, somaStrings(INFO->linha_atual->lin, INFO->linha_atual->prox->lin));
                     removeLinha(INFO->linha_atual->prox);
                     INFO->n_linhas--;
+
                     break;
                 
 
                 case 'J':// MOVE CURSOR PARA A PROXIMA LINHA
                     
                     if(INFO->lin == INFO->n_linhas - 1){
+
                         break;
                     }
 
@@ -309,15 +350,15 @@ void Iteracao_do_Programa(){
                     if(INFO->col > INFO->linha_atual->tam){
                         INFO->col = INFO->linha_atual->tam;
                     }
-
-
                     
                     break;
 
-                case 'H':
+                case 'H'://MOVE CURSOR PARA LINHA ANTERIOR
 
                     if(INFO->lin == 0){
+
                         break;
+
                     }
 
                     INFO->linha_atual = INFO->linha_atual->ant;
@@ -329,25 +370,41 @@ void Iteracao_do_Programa(){
 
                     break;
 
-                case 'Z':
+                case 'Z'://MOSTRA PILHA
+
                     mostraPilha();
+
                     s = "";
                     break;
 
                 case 'W'://IMPRIME A VERSAO ATUAL DO TEXTO
 
+                    printf("\n");
                     imprimeTexto();
                     printf("\n\n");
+
                     break;
 
                 case '?':
+
+                    informacao();
+
+                    s = "";
                     break;
 
-                case 'K':
+                case 'K':// IMPRIME INFORMACAO DO TEXTO
+                    
+                    if(INFO->nome_arquivo == NULL) INFO->nome_arquivo = " "; 
+                    printf("nome do arquivo: %s\n", INFO->nome_arquivo);
+                    printf("linha: %d; coluna: %d\n", INFO->lin, INFO->col);
+                    printf("posicao salva - linha: %d; coluna: %d\n", INFO->lin_M, INFO->col_M);
+                    printf("numero de linhas: %d\n\n", INFO->n_linhas);
 
+                    s = "";
                     break;
                 
                 default:
+
                     break;
             }
 
@@ -356,16 +413,13 @@ void Iteracao_do_Programa(){
                 return;
             }
 
-            
-
-
         }while(strlen(s) > 0);
         imprimeLinhaAtual(INFO);
+
     }
     
     fechaPrograma(INFO);
     
-
 }
 
 /******************************************/

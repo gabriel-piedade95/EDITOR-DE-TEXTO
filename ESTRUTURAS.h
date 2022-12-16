@@ -208,6 +208,13 @@ void mostraPilha(){
     }
 }
 
+void apagaPilha(){
+
+    while(topo != NULL){
+        Desempilha();
+    }
+}
+
 /* *********************************** */
 
 /*********** INFORMACAO PROGRAMA ***********/
