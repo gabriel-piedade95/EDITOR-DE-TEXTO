@@ -55,7 +55,7 @@ void fechaPrograma(){// libera a memoria alocada pelo texto e pela pilha
 void Iteracao_do_Programa(){
 
     //VARAIVEIS AUXILIARES USADAS NO PROGRAMA
-    char * s; char * s_aux_1; char * s_aux_2;
+    char * s; char * s_aux_1; char * s_aux_2; char * s_aux_3;
     char comando = '0';
     int fecha = 0; int salva = 0;
     int aux_1, aux_2, aux_3;
@@ -236,7 +236,7 @@ void Iteracao_do_Programa(){
                     break;
 
                 
-                case 'V'://DESEMPILHA ... falta terminar....
+                case 'V'://DESEMPILHA 
 
                     if(topo != NULL){
 
@@ -264,7 +264,7 @@ void Iteracao_do_Programa(){
                     s = "";
                     break;
 
-                case 'X'://EMPILHA E EXCLUI ... falta terminar....
+                case 'X'://EMPILHA E EXCLUI 
 
 
                     if(col_M > col){// ver ESTRUTURAS.h e FUNCOES_PROGRAMA.h
@@ -284,51 +284,46 @@ void Iteracao_do_Programa(){
 
                 case 'B'://BUSCA PALAVRA NO TEXTO
 
+                    
+                    aux_1 = buscaLinha(s, linha_atual->lin);
                     linha_aux = linha_atual;
-                    s_aux_1 = strstr(linha_aux->lin, s);
                     aux_2 = lin;
-                    while(s_aux_1 == NULL && aux_2 <= n_linhas - 1){
+                    while(aux_1 == -1 && aux_2 < n_linhas -1){
+
                         linha_aux = linha_aux->prox;
                         aux_2++;
-                        s_aux_1 = strstr(linha_aux->lin, s);
-                        
+                        aux_1 = buscaLinha(s, linha_aux->lin);
                     }
 
-                    if(s_aux_1 != NULL){
-                        col = s_aux_1 - linha_aux->lin;
+                    if(aux_1 != -1){
+                        col = aux_1;
                         lin = aux_2;
                         linha_atual = linha_aux;
-                    }
-                    
-                    
-                    
+                    }  
                     s = "";
                     break;
+                    
+                    
 
                 case 'S'://(Ss/r) SUBSTITUI A STRING s PELA STRING r EM TODO O TEXTO 
 
-                    s_aux_1 = " ";
-                    s_aux_2 = " ";
+
+                    s_aux_1 = strstr(s,"/");
+                    aux_1 = s_aux_1 - s;
+                    s_aux_2 = copiaString(0, aux_1, s);
+                    s_aux_3 = copiaString(aux_1 + 1, strlen(s), s);
                     
-                    separaString(s, &s_aux_1, &s_aux_2);// separa a string em s e r usando '/' como marcador
-                    linha_aux = cabeca;
-                    while(linha_aux != NULL){// enquanto nao chegar no fim do arquivo
-
-                        substituiStringLinha(&linha_aux->lin, s_aux_1, s_aux_2);//substitui a palavra na linha atual
-                        linha_aux->tam = strlen(linha_aux->lin);
-                        linha_aux = linha_aux->prox;
-
-
-                    }
+                    printf("%s %s\n", s_aux_2, s_aux_3);
+                    
                     
                     s = "";
                     break;
                 
                 
-                case 'N'://SEPARA A LINHA ... falta terminar....
+                case 'N'://SEPARA A LINHA 
 
-                    insereLinha(linha_atual, copiaString(col + 1, linha_atual->tam, linha_atual->lin));// copia a string a partir do ponteiro
-                    strcpy(linha_atual->lin, copiaString(0, col + 1, linha_atual->lin));// insere essa string em uma nova linha 
+                    insereLinha(linha_atual, copiaString(col + 1, linha_atual->tam, linha_atual->lin));// insere essa string em uma nova linha
+                    strcpy(linha_atual->lin, copiaString(0, col + 1, linha_atual->lin)); // copia a string a partir do ponteiro
                     linha_atual->tam = (linha_atual->tam - col + 1);
                     n_linhas++;
 
@@ -376,7 +371,7 @@ void Iteracao_do_Programa(){
 
                     break;
 
-                case 'Z'://MOSTRA PILHA ... falta terminar....
+                case 'Z'://MOSTRA PILHA 
 
                     mostraPilha();
 

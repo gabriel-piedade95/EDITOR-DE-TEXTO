@@ -253,75 +253,25 @@ char * insereString(int col, struct linha * linha_atual, char * s){// insere str
 
 
 
-int buscaLinha (char * p, char * t, int inicio) // busca palavra na linha e retorna a coluna
+int buscaLinha(char * p, char * t) 
 {
-   
-    char *p1, *p2, *p3;
-    int i = 0, j = 0, achou = -1;
+   int i;
+   int m = strlen(p);
+   int n = strlen(t);
 
-    p1 = p;
-    p2 = t;
-
-  for(i = 0; i<strlen(t); i++)
-  {
-    if(*p1 == *p2)
-      {
-          p3 = p1;
-          for(j = 0;j<strlen(p);j++)
-          {
-            if(*p3 == *p2)
-            {
-              p3++;p2++;
-            } 
-            else
-              break;
-          }
-          p2 = p;
-          if(j == strlen(p))
-          {
-            achou = 1;
-            
-          }
+   for (int k = 0; k <= n-m; ++k) {
+      for (i = 0; i < m && p[i] == t[i+k]; i++); 
+      if (i == m) {
+        return k;
       }
-    p1++; 
-  }
-  
-  return achou;
+   }
+
+   return -1;
+
    
 }
 
 
-void separaString(char * s, char ** aux1, char ** aux2){// separa a stirng s em duas strings separadas por '/'
-
-    int tam_s = strlen(s);
-    int pos;
-
-    pos = buscaLinha("/", s, 0);
-    *aux1 = copiaString(0, pos, s);
-    *aux2 = copiaString(pos + 1, tam_s, s);
-
-}
-
-
-void substituiStringLinha(char ** s, char * a, char * b){// substitui a por b na string s
-
-    
-    int pos = buscaLinha(a, *s, 0);// busca posica da palavra a na linha s
-    char * aux1;
-
-    while(pos != -1){// enquanto tiver a palavra a na linha ela sera substituida
-
-        aux1 = copiaString(0, pos, *s);
-        *s = copiaString(pos + strlen(a), strlen(*s), *s);
-
-        strcpy(aux1, somaStrings(aux1, b));
-        strcpy(*s, somaStrings(aux1, *s));
-        pos = buscaLinha(a, *s, 0);
-        
-    }
-
-    
-}
 
 /******************************************/
 
