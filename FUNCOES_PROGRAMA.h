@@ -4,7 +4,7 @@
 
 /**************  LE ENTRADA  *****************/
 
-char * le_Entrada(){
+char * le_Entrada(){// le entrada da linha de comando do editor
 
     char *string = NULL;
     int letra;
@@ -30,7 +30,7 @@ char * le_Entrada(){
 
 /**************** ABRE ARQUIVO *************/
 
-char * leLinhaTexto(FILE * arq){
+char * leLinhaTexto(FILE * arq){// le uma linha do arquivo e retorna a string 
 
     char *string = NULL;
     int letra;
@@ -40,7 +40,7 @@ char * leLinhaTexto(FILE * arq){
         if (tam + 1 >= s)
         {
             s = s * 2 + 1;
-            string = realloc(string, sizeof(char)*s);
+            string = realloc(string, sizeof(char)*s - 1);
         }
         if(letra == '\n'){
             break;
@@ -56,7 +56,7 @@ char * leLinhaTexto(FILE * arq){
 
     return NULL;
 }
-int abreArquivo(char * nomeArquivo){
+int abreArquivo(char * nomeArquivo){// abre arquivo, escreve o texto na lista ligada e retorna o numero de linhas
 
     FILE * arquivo;
     char * string = NULL;
@@ -83,7 +83,7 @@ int abreArquivo(char * nomeArquivo){
 
 }
 
-void escreveArquivo(char * nomeArquivo){
+void escreveArquivo(char * nomeArquivo){// salva arquivo em txt e apaga o que tinha anteriormente no arquivo
 
     FILE * arquivo;
     struct linha * aux = cabeca;
@@ -110,12 +110,12 @@ void escreveArquivo(char * nomeArquivo){
 
 /* *********** ALTERA LINHAS  ************ */
 
-int proximaPalavra(struct info * I){
+int proximaPalavra(int col, struct linha * linha_atual){// move cursor para o inicio da proxima palavra
 
     
-    int posicao = I->col;
+    int posicao = col;
     int aux = 0;
-    char * s = I->linha_atual->lin;
+    char * s = linha_atual->lin;
     char c = s[posicao];
 
     while(c != ' ' && aux != 1){
@@ -128,31 +128,31 @@ int proximaPalavra(struct info * I){
 
     }
 
-    if(posicao >= I->linha_atual->tam){
-        return I->col;
+    if(posicao >= linha_atual->tam){
+        return col;
     }
 
 
     return posicao + 1;
 }
 
-int inicioPalavra(struct info * I){
+int inicioPalavra(int col, struct linha * linha_atual){// inicio da palavra em que esta o ponteiro ou palavra anterior (se tiver num espaco)
 
-    if(I->col == 0){
+    if(col == 0){
         return 0;
     }
 
-    int posicao = I->col;
+    int posicao = col;
     int aux = 0;
-    char * s = I->linha_atual->lin;
+    char * s = linha_atual->lin;
     char c = s[posicao];
 
-    while(c == ' '){
+    while(c == ' '){// volta ate encontrar uma palavra
         posicao--;
         c = s[posicao];
     }
 
-    while(c != ' ' && aux != 1){
+    while(c != ' ' && aux != 1){// volta ate encontrar o inicio da palavra
 
         if (c == ' '){
             aux = 1;
@@ -167,21 +167,23 @@ int inicioPalavra(struct info * I){
 
 }
 
-char * revomeCarectere(struct info * I){
+char * revomeCarectere(struct linha * linha_atual, int col){// remove caractere da posicao atual
 
-    char * nova_s = malloc(sizeof (char) * I->linha_atual->tam);
+    char * nova_s = malloc(sizeof (char) * (linha_atual->tam - 1));
     int pos = 0;
     int aux = 0;
-    while(pos < I->col){
+    //copia string ate a posicao do caractere
+    while(pos < col){
         
-        nova_s[pos++] = I->linha_atual->lin[aux++];
+        nova_s[pos++] = linha_atual->lin[aux++];
     }
 
-    aux++;
+    aux++;// pula o caractere
 
-    while(pos < I->linha_atual->tam){
+    // copia string ate o final
+    while(pos < linha_atual->tam){
         
-        nova_s[pos++] = I->linha_atual->lin[aux++];   
+        nova_s[pos++] = linha_atual->lin[aux++];   
     }
 
     return nova_s;
@@ -202,19 +204,19 @@ char * copiaString(int inicio, int fim, char * s){
 
 }
 
-char * somaStrings(char * s1, char * s2){
+char * somaStrings(char * s1, char * s2){// unir duas strings 
 
     char * nova_s = malloc(sizeof (char) * (strlen(s1) + strlen(s2)) -1);
     int i = 0;
     int j = 0;
-
+    //copia a primeira em uma nova string
     while(s1[i] != '\0'){
         nova_s[j] = s1[i];
         i++; j++;
     }
 
     i = 0;
-
+    // copia a segunda em uma nova string
     while(s2[i] != '\0'){
         nova_s[j] = s2[i];
         i++; j++;
@@ -222,10 +224,10 @@ char * somaStrings(char * s1, char * s2){
 
     nova_s[j] = '\0';
 
-    return nova_s;
+    return nova_s;// retorna uma nova string
 }
 
-void removeString(int inicio, int fim, char * s){
+void removeString(int inicio, int fim, char * s){// remove a string entre as posicoes marcadas
 
     char * aux1 = copiaString(0, inicio + 1, s);
     char * aux2 = copiaString(fim, strlen(s), s);
@@ -234,11 +236,13 @@ void removeString(int inicio, int fim, char * s){
 
 }
 
-char * insereString(struct info * I, char * s){
+char * insereString(int col, struct linha * linha_atual, char * s){// insere string na posicao atual do ponteiro
 
     
-    char * aux1 = copiaString(0, I->col + 1, I->linha_atual->lin);
-    char * aux2 = copiaString(I->col + 1, I->linha_atual->tam, I->linha_atual->lin);
+    char * aux1 = copiaString(0, col + 1, linha_atual->lin);// copia a linha atual ate o ponteiro
+    char * aux2 = copiaString(col + 1, linha_atual->tam, linha_atual->lin);// copia linha atual do ponteiro ao fim
+
+    //uni as strings cortadas com a string a ser inserida
     strcpy(aux1, somaStrings(aux1, s));
     strcpy(aux2, somaStrings(aux1, aux2));
 
@@ -247,14 +251,15 @@ char * insereString(struct info * I, char * s){
 
 /******************************************/
 
-int buscaLinha (char * p, char * t) 
+int buscaLinha (char * p, char * t) // busca palavra na linha e retorna a coluna
 {
    
    int i, k;
    int m = strlen(p);
    int n = strlen(t);
-   for (k = 0; k <= n-m; ++k) {
-      for (i = 0; i < m && p[i] == t[i+k]; i++); 
+
+   for (k = 0; k <= n-m; ++k) {// percorre a linha
+      for (i = 0; i < m && p[i] == t[i+k]; i++); // percorre as palavras da linha
       if (i == m) {
         return k;
       }
@@ -264,13 +269,13 @@ int buscaLinha (char * p, char * t)
    
 }
 
-int buscaTexto(struct info * I, char * s, int * achou){
+int buscaTexto(char * s, int * achou, int lin){// busca palavra no texto e retorna a linha
 
-    struct linha * l_aux = cabeca;
-    int l = I->lin;
+    struct linha * l_aux = cabeca;// inicio do texto
+    int l = lin;
 
-    while(l_aux != NULL){
-        *achou = buscaLinha(s, l_aux->lin);
+    while(l_aux != NULL){// loop para percorrer o texto
+        *achou = buscaLinha(s, l_aux->lin); // busca palavra na linha
         l_aux = l_aux->prox;
         
         if (*achou != -1){
@@ -283,7 +288,7 @@ int buscaTexto(struct info * I, char * s, int * achou){
     return l;
 }
 
-void separaString(char * s, char ** aux1, char ** aux2){
+void separaString(char * s, char ** aux1, char ** aux2){// separa a stirng s em duas strings separadas por '/'
 
     int tam_s = strlen(s);
     int pos;
@@ -295,13 +300,13 @@ void separaString(char * s, char ** aux1, char ** aux2){
 }
 
 
-void substituiStringLinha(char ** s, char * a, char * b){
+void substituiStringLinha(char ** s, char * a, char * b){// substitui a por b na string s
 
     
-    int pos = buscaLinha(a, *s);
+    int pos = buscaLinha(a, *s);// busca posica da palavra a na linha s
     char * aux1;
 
-    while(pos != -1){
+    while(pos != -1){// enquanto tiver a palavra a na linha ela sera substituida
 
         aux1 = copiaString(0, pos, *s);
         *s = copiaString(pos + strlen(a), strlen(*s), *s);
@@ -317,7 +322,7 @@ void substituiStringLinha(char ** s, char * a, char * b){
 
 
 
-void informacao(){
+void informacao(){// imprime informacao sobre os comandos do editor
 
     printf("\n~> LISTA DE COMANDOS <~\n\n");
 
@@ -353,9 +358,9 @@ void informacao(){
 
 
     printf("PROGRAMA:\n");
-    printf("! -> Encerra o programa\n");
-    printf("Z -> Exibe a pilha de memoria, comecando pelo topo\n");
+    printf("Z -> Exibe a pilha de memoria\n");
     printf("W -> Imprime versao atual do texto\n");
     printf("K -> Imprime informacoes sobre o texto\n\n\n");
+    printf("! -> Encerra o programa\n");
 
 }

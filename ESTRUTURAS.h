@@ -9,10 +9,10 @@
 // Estrutura usada para salvar as linhas do arquivo
 struct linha{
 
-    struct linha *prox;
-    struct linha *ant;
+    struct linha *prox;// proxima linha
+    struct linha *ant;// linha anterior
     int tam; // tamanho da linha
-    char * lin;
+    char * lin;// string representando a linha
 
 };
 
@@ -31,30 +31,15 @@ struct linha * criaLinha(){
    return L;
 }
 
-void insereLinhaCabeca(char * string){
-
-    struct linha * novaLinha = criaLinha();
-    novaLinha->lin = string;
-    novaLinha->tam = strlen(string);
-
-    if(cabeca == NULL){
-        cabeca = novaLinha;
-        return;
-    }
-
-    cabeca->ant = novaLinha;
-    novaLinha->prox = cabeca;
-    cabeca = novaLinha;
-
-}
-
+// insere uma nova linha apos a linha atual
 void insereLinha(struct linha * L, char * string){
 
-    if(L == NULL){
+    if(L == NULL){// se a linha a ser inserida estiver vaizia nao faz nada
         return;
     }
 
-    struct linha * novaLinha = criaLinha();
+    // caso contrario insere a linha
+    struct linha * novaLinha = criaLinha();// cria estrutura
     novaLinha->lin = string;
     novaLinha->tam = strlen(string);
 
@@ -67,6 +52,7 @@ void insereLinha(struct linha * L, char * string){
     }
 }
 
+// insere uma linha no fim do texto
 void insereLinhaFim(char * string){
 
     struct linha * novaLinha = criaLinha();
@@ -95,7 +81,7 @@ void insereLinhaFim(char * string){
 }
 
 
-
+// remove a linha atual
 void removeLinha(struct linha * L){
 
     if(cabeca == NULL || L == NULL){
@@ -216,54 +202,4 @@ void apagaPilha(){
 }
 
 /* *********************************** */
-
-/*********** INFORMACAO PROGRAMA ***********/
-
-struct info{
-
-    int lin;
-    int col;
-    int n_linhas;
-    int col_M;
-    int lin_M;
-    char * nome_arquivo;
-    struct linha * linha_atual;
-
-
-};
-
-struct info * iniciaINFO(){
-
-    struct info * Info = (struct info *)malloc(sizeof(struct info));
-    Info->lin = 0;
-    Info->col = 0;
-    Info->col_M = 0;
-    Info->lin_M = 0;
-    Info->linha_atual = cabeca;
-    Info->nome_arquivo = NULL;
-    Info->n_linhas = 0;
-
-    return Info;
-    
-}
-
-void liberaINFO(struct info * I){
-
-    struct linha * aux = cabeca;
-    struct linha * temp;
-    while(aux != NULL){
-        temp = aux;
-        aux = aux->prox;
-        free(temp);
-
-    }
-    free(I->nome_arquivo);
-    free(cabeca);
-    free(aux);
-    free(I);
-    return;
-}
-
-
-/* ************************************** */
 

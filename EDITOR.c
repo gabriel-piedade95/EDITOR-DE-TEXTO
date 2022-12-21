@@ -5,7 +5,7 @@
 #include "FUNCOES_PROGRAMA.h"
 
 
-void fazabertura() {
+void fazabertura() {// faz abertura do programa com algumas informacoes
 
 	printf("****************************************************************\n");
     printf("*                                                              *\n");
@@ -17,62 +17,70 @@ void fazabertura() {
 
 }
 
-
-void imprimeLinhaAtual(struct info * I){
+//IMPRIME LINHA ATUAL 
+void imprimeLinhaAtual(struct linha * linha_atual, int col, int col_M){
     
     int i;
-    if(I->linha_atual == NULL){
+    if(linha_atual == NULL){// se a linha for nula pular linha
 
         printf("\n");
         printf("^\n\n");
 
     }
-    else{
+    else{// caso contrario imprime a linha
 
-        printf("%s\n", I->linha_atual->lin);
-        char s[I->linha_atual->tam+2];
-        for(i = 0; i < I->linha_atual->tam+2; i++){
-            s[i] = ' ';
+        printf("%s\n", linha_atual->lin);
+        char s[linha_atual->tam+2];
+        for(i = 0; i < linha_atual->tam+2; i++){
+            s[i] = ' ';// cria uma string com espacos ' '
         }
-        s[I->linha_atual->tam+2] = '\0';
-        s[I->col_M] = 'M';
-        s[I->col] = '^';
-        printf("%s\n\n", s);
+        s[linha_atual->tam+2] = '\0';
+        s[col_M] = 'M';// coloca M na posicao anterior
+        s[col] = '^';// coloca ^ na posica do ponteiro
+        printf("%s\n\n", s);// imprime a linha de baixo com o ponteiro e a posicao anterior
     }
     
         
 }
-void fechaPrograma(struct info * I){
+
+void fechaPrograma(){// libera a memoria alocada pelo texto e pela pilha
     
     apagaTexto();
-    liberaINFO(I);
     apagaPilha();
     
 
 }
 
 
-
 void Iteracao_do_Programa(){
 
-
+    //VARAIVEIS AUXILIARES USADAS NO PROGRAMA
     char * s; char * s_aux_1; char * s_aux_2;
     char comando = '0';
-    int fecha = 0; int aux_1, aux_2, aux_3;
-    struct info * INFO = iniciaINFO();
+    int fecha = 0; 
+    int aux_1, aux_2, aux_3;
     struct linha * linha_aux;
-    INFO->linha_atual = cabeca;
+    
 
-    while(!fecha){
+    //INFORMACOES DO PROGRAMA
+    int lin = 0;
+    int col = 0;
+    int n_linhas = 0;
+    int col_M = 0;
+    char * nome_arquivo = NULL;
+    struct linha * linha_atual;
 
-        printf("%d,%d>", INFO->lin, INFO->col);
-        s = le_Entrada();
+    while(!fecha){// o programa roda enquanto a variavel fecha for igual a 0
+
+
+        printf("%d,%d>", lin, col); // imprime o mostrador da posicao no texto
+        s = le_Entrada();// s eh uma string que recebe o comando digitado pelo usuario
        
 
-        do{
+        do{// loop que 'desenfilera' a string s e realiza os comandos digitados
 
-            comando  = s[0];
-            s = &s[1];
+            comando  = s[0];// a primeira letra da string s eh recebida como um comando
+            s = &s[1];// o ponteiro de s passa para a proxima letra da string
             
 
             switch (comando){
@@ -82,16 +90,16 @@ void Iteracao_do_Programa(){
                     fecha = 1;
                     break;
 
-                case 'I'://INSERE LINHA...terminar
+                case 'I'://INSERE LINHA
 
-                    if(INFO->nome_arquivo == NULL){
+                    if(nome_arquivo == NULL){// se o arquivo for vazio insere o texto no inicio
                         insereLinhaFim(s);
-                        INFO->linha_atual = cabeca;
-                        INFO->linha_atual->tam = strlen(s);
+                        linha_atual = cabeca;
+                        linha_atual->tam = strlen(s);
                     }
-                    else{
-                        strcpy(INFO->linha_atual->lin, insereString(INFO, s));
-                        INFO->linha_atual->tam = INFO->linha_atual->tam + strlen(s);
+                    else{// caso contrario insere o texto na posicao atual do ponteiro
+                        strcpy(linha_atual->lin, insereString(col, linha_atual, s));
+                        linha_atual->tam = linha_atual->tam + strlen(s);
                         
                     }
 
@@ -100,10 +108,10 @@ void Iteracao_do_Programa(){
 
                 case 'A'://ABRE ARQUIVO TXT
 
-                    apagaTexto();
-                    INFO->n_linhas = abreArquivo(s);
-                    INFO->linha_atual = cabeca;
-                    INFO->nome_arquivo = s;
+                    apagaTexto();// apaga o texto anterior, caso ele exista
+                    n_linhas = abreArquivo(s);// essa funcao abre o arquivo (colocando ele na lista ligada) e devolve o numero de linhas do texto
+                    linha_atual = cabeca;
+                    nome_arquivo = s;
 
                     s = "";
                     break;
@@ -117,84 +125,84 @@ void Iteracao_do_Programa(){
 
                 case 'F':// MOVE CURSOR PARA A PROXIMA COLUNA
 
-                    if(INFO->linha_atual->tam > INFO->col){
-                        INFO->col++;
+                    if(linha_atual->tam > col){
+                        col++;
                     }
 
                     break;
 
                 case 'T':// MOVE CURSOR PARA A COLUNA ANTERIOR
 
-                    if(INFO->col == 0){
+                    if(col == 0){
                         
                         break;
                     }
-                    INFO->col--;
+                    col--;
 
                     break;
 
                 case 'O':// MOVE CURSOR PARA O INICIO DA LINHA (COLUNA 0)
 
-                    INFO->col = 0;
+                    col = 0;
 
                     break;
 
                 case 'P':// MOVE CURSOR PARA O INICIO DA PROXIMA PALAVRA
                     
-                    INFO->col = proximaPalavra(INFO);
+                    col = proximaPalavra(col, linha_atual);// ver FUNCOES_PROGRAMA.h
 
                     break;
                 
                 case 'Q':// MOVE O CURSOR O INICIO DA PALAVRA ATUAL
                     
-                    INFO->col = inicioPalavra(INFO);
+                    col = inicioPalavra(col, linha_atual);// ver FUNCOES_PROGRAMA.h
 
                     break;
 
                 case '$':// MOVE O CURSOR O FIM DA LINHA ATUAL
 
-                    INFO->col = INFO->linha_atual->tam;
+                    col = linha_atual->tam;
 
                     break;
 
                 case ':':// MOVE O CURSOR PARA UMA LINHA ESPECIFICA (OU ULTIMA LINHA 'F')
                    
-                    if(s[0] == 'F'){
+                    if(s[0] == 'F'){// se o comando for ':F' o ponteiro vai para a ultima linha do texto
                         
-                        if(INFO->lin == INFO->n_linhas -1){
+                        if(lin == n_linhas -1){// se ja estiver no final nao faz nada
                             break;
                         }
                         
-                        while(INFO->lin < INFO->n_linhas-1){
-                            INFO->linha_atual = INFO->linha_atual->prox;
-                            INFO->lin++;
+                        while(lin < n_linhas-1){// caso contrario desce ate o fim do texto
+                            linha_atual = linha_atual->prox;
+                            lin++;
                            
                         }
                         
                     }
 
-                    else{
+                    else{// se o comando for ':x', onde x eh um  inteiro, o ponteiro vai para a linha x
 
-                        aux_1 = atoi(s);
+                        aux_1 = atoi(s);//transforma a string s em um inteiro  
                         
-                        if(aux_1 > INFO->lin){
+                        if(aux_1 > lin){// se x for maior que a linha atual vamos para a proxima linha ate achar x
 
-                            while(INFO->lin < aux_1){
+                            while(lin < aux_1){
 
                                 
-                                INFO->linha_atual = INFO->linha_atual->prox;
-                                INFO->lin++;
-                                if(INFO->lin == INFO->n_linhas -1){
+                                linha_atual = linha_atual->prox;
+                                lin++;
+                                if(lin == n_linhas - 1){
                                     break;
                                 }
                             }
 
                         }
-                        else{
+                        else{// se x for menor que a linha atual vamos para a linha anterior ate achar x
 
-                            while(INFO->lin > aux_1){
-                                INFO->linha_atual = INFO->linha_atual->ant;
-                                INFO->lin--;
+                            while(lin > aux_1){
+                                linha_atual = linha_atual->ant;
+                                lin--;
                            
                             }
 
@@ -202,37 +210,35 @@ void Iteracao_do_Programa(){
 
                     }
 
-                    INFO->col = 0;
+                    col = 0;// posicao do ponteiro para inicio da linha
 
-                    comando  = s[0];
-                    s = &s[1];
-
+                    
+                    s = "";
                     break;
 
                 case 'D'://DELETA UM CARACTERE
 
-                    strcpy(INFO->linha_atual->lin, revomeCarectere(INFO));
-                    INFO->linha_atual->tam--;
+                    strcpy(linha_atual->lin, revomeCarectere(linha_atual, col));// ver FUNCOES_PROGRAMA.h
+                    linha_atual->tam--;
 
                     break;
                 
                 case 'M': //SALVA A POSICAO ATUAL
 
-                    INFO->col_M = INFO->col;
-                    INFO->lin_M = INFO->lin;
+                    col_M = col;
 
                     break;
 
                 
-                case 'V'://DESEMPILHA
+                case 'V'://DESEMPILHA ... falta terminar....
 
                     if(topo != NULL){
 
-                        s_aux_2 = Desempilha();
+                        s_aux_2 = Desempilha();// ver ESTRUTURAS.h
                         if(s_aux_2 != NULL){
 
-                            strcpy(INFO->linha_atual->lin, insereString(INFO, s_aux_2));
-                            INFO->linha_atual->tam = INFO->linha_atual->tam + strlen(s_aux_2) - 1;
+                            strcpy(linha_atual->lin, insereString(col, linha_atual ,s_aux_2));// ver FUNCOES_PROGRAMA.h
+                            linha_atual->tam = linha_atual->tam + strlen(s_aux_2) - 1;
                         }
                         
                     }
@@ -242,28 +248,28 @@ void Iteracao_do_Programa(){
 
                 case 'C'://EMPILHA
 
-                    if(INFO->col_M > INFO->col){
-                        Empilha(copiaString(INFO->col_M, INFO->linha_atual->tam ,INFO->linha_atual->lin));
+                    if(col_M > col){// ver ESTRUTURAS.h e FUNCOES_PROGRAMA.h
+                        Empilha(copiaString(col_M, linha_atual->tam ,linha_atual->lin));
                     }
                     else{
-                        Empilha(copiaString(INFO->col_M, INFO->col ,INFO->linha_atual->lin));
+                        Empilha(copiaString(col_M, col, linha_atual->lin));
                     }
                     
                     s = "";
                     break;
 
-                case 'X'://EMPILHA E EXCLUI
+                case 'X'://EMPILHA E EXCLUI ... falta terminar....
 
 
-                    if(INFO->col_M > INFO->col){
-                        Empilha(copiaString(INFO->col_M, INFO->linha_atual->tam ,INFO->linha_atual->lin));
-                        removeString(INFO->col_M, INFO->linha_atual->tam ,INFO->linha_atual->lin);
-                        INFO->linha_atual->tam -= (INFO->linha_atual->tam - INFO->col_M);
+                    if(col_M > col){// ver ESTRUTURAS.h e FUNCOES_PROGRAMA.h
+                        Empilha(copiaString(col_M, linha_atual->tam ,linha_atual->lin));
+                        removeString(col_M, linha_atual->tam ,linha_atual->lin);
+                        linha_atual->tam -= (linha_atual->tam - col_M);
                     }
                     else{
-                        Empilha(copiaString(INFO->col_M, INFO->col ,INFO->linha_atual->lin));
-                        removeString(INFO->col_M, INFO->col ,INFO->linha_atual->lin);
-                        INFO->linha_atual->tam -= (INFO->col_M - INFO->col);
+                        Empilha(copiaString(col_M, col ,linha_atual->lin));
+                        removeString(col_M, col ,linha_atual->lin);
+                        linha_atual->tam -= (col_M - col);
                     }
                     
                     s = "";
@@ -273,17 +279,17 @@ void Iteracao_do_Programa(){
                 case 'B'://BUSCA PALAVRA NO TEXTO
     
                     aux_3 = -1;
-                    aux_2 = buscaTexto(INFO, s, &aux_3);
+                    aux_2 = buscaTexto(s, &aux_3, lin);// a funcao buscaTexto() encontra a proxima ocorrencia de s no texto e devolve a linha da palavra
                     
                     
-                    if(aux_3 >=  INFO->col && aux_2 >= INFO->lin){
+                    if(aux_3 >=  col && aux_2 >= lin){// se a palavra estiver em outra linha para frente ou mais adiante na coluna movemos o ponteiro
 
-                        INFO->col = aux_3;
+                        col = aux_3;// poiscao da coluna
 
-                        while(INFO->lin < aux_2){
-                            INFO->linha_atual = INFO->linha_atual->prox;
-                            INFO->lin++;
-                            if(INFO->lin == INFO->n_linhas -1){
+                        while(lin < aux_2){// move ate achar a linha
+                            linha_atual = linha_atual->prox;
+                            lin++;
+                            if(lin == n_linhas -1){
                                     break;
                                 }
                         }
@@ -293,17 +299,17 @@ void Iteracao_do_Programa(){
                     s = "";
                     break;
 
-                case 'S'://terminar
+                case 'S'://(Ss/r) SUBSTITUI A STRING s PELA STRING r EM TODO O TEXTO 
 
                     s_aux_1 = " ";
                     s_aux_2 = " ";
                     
-                    separaString(s, &s_aux_1, &s_aux_2);
+                    separaString(s, &s_aux_1, &s_aux_2);// separa a string em s e r usando '/' como marcador
                     linha_aux = cabeca;
-                    while(linha_aux != NULL){
+                    while(linha_aux != NULL){// enquanto nao chegar no fim do arquivo
 
-                        substituiStringLinha(&linha_aux->lin, s_aux_1, s_aux_2);
-                        linha_aux->tam = linha_aux->tam + strlen(s_aux_1) - strlen(s_aux_2);
+                        substituiStringLinha(&linha_aux->lin, s_aux_1, s_aux_2);//substitui a palavra na linha atual
+                        linha_aux->tam = strlen(linha_aux->lin);
                         linha_aux = linha_aux->prox;
 
 
@@ -313,58 +319,58 @@ void Iteracao_do_Programa(){
                     break;
                 
                 
-                case 'N'://SEPARA A LINHA
+                case 'N'://SEPARA A LINHA ... falta terminar....
 
-                    insereLinha(INFO->linha_atual, copiaString(INFO->col + 1, INFO->linha_atual->tam, INFO->linha_atual->lin));
-                    strcpy(INFO->linha_atual->lin, copiaString(0, INFO->col + 1, INFO->linha_atual->lin));
-                    INFO->linha_atual->tam = (INFO->linha_atual->tam - INFO->col + 1);
-                    INFO->n_linhas++;
+                    insereLinha(linha_atual, copiaString(col + 1, linha_atual->tam, linha_atual->lin));// copia a string a partir do ponteiro
+                    strcpy(linha_atual->lin, copiaString(0, col + 1, linha_atual->lin));// insere essa string em uma nova linha 
+                    linha_atual->tam = (linha_atual->tam - col + 1);
+                    n_linhas++;
 
                     break;
 
                 case 'U'://UNE LINHA ATUAL COM A PROXIMA
 
-                    strcpy(INFO->linha_atual->lin, somaStrings(INFO->linha_atual->lin, INFO->linha_atual->prox->lin));
-                    removeLinha(INFO->linha_atual->prox);
-                    INFO->n_linhas--;
+                    strcpy(linha_atual->lin, somaStrings(linha_atual->lin, linha_atual->prox->lin));// une a linha atual com a linha de baixo
+                    removeLinha(linha_atual->prox);// remove a linha de baixo
+                    n_linhas--;
 
                     break;
                 
 
                 case 'J':// MOVE CURSOR PARA A PROXIMA LINHA
                     
-                    if(INFO->lin == INFO->n_linhas - 1){
+                    if(lin == n_linhas - 1){// se ja estiver no fim nao faz nada
 
                         break;
                     }
+                    // caso contrario volta move para a proxima linha
+                    linha_atual = linha_atual->prox;
+                    lin++;
 
-                    INFO->linha_atual = INFO->linha_atual->prox;
-                    INFO->lin = INFO->lin + 1;
-
-                    if(INFO->col > INFO->linha_atual->tam){
-                        INFO->col = INFO->linha_atual->tam;
+                    if(col > linha_atual->tam){// atualiza a coluna para a posicao possivel
+                        col = linha_atual->tam;
                     }
                     
                     break;
 
                 case 'H'://MOVE CURSOR PARA LINHA ANTERIOR
 
-                    if(INFO->lin == 0){
+                    if(lin == 0){// se ja estiver no inicio nao faz nada
 
                         break;
 
                     }
+                    // caso contrario volta move para a linha anterior
+                    linha_atual = linha_atual->ant;
+                    lin--;
 
-                    INFO->linha_atual = INFO->linha_atual->ant;
-                    INFO->lin = INFO->lin - 1;
-
-                    if(INFO->col > INFO->linha_atual->tam){
-                        INFO->col = INFO->linha_atual->tam;
+                    if(col > linha_atual->tam){// atualiza a coluna para a posicao possivel
+                        col = linha_atual->tam;
                     }
 
                     break;
 
-                case 'Z'://MOSTRA PILHA
+                case 'Z'://MOSTRA PILHA ... falta terminar....
 
                     mostraPilha();
 
@@ -374,25 +380,14 @@ void Iteracao_do_Programa(){
                 case 'W'://IMPRIME A VERSAO ATUAL DO TEXTO
 
                     printf("\n");
-                    imprimeTexto();
+                    imprimeTexto();// ver ESTRUTURAS.h
                     printf("\n\n");
 
                     break;
 
-                case '?':
+                case '?'://IMPRIME INFORMACOES SOBRE TODOS OS COMANDOS DO EDITOR
 
-                    informacao();
-
-                    s = "";
-                    break;
-
-                case 'K':// IMPRIME INFORMACAO DO TEXTO
-                    
-                    if(INFO->nome_arquivo == NULL) INFO->nome_arquivo = " "; 
-                    printf("nome do arquivo: %s\n", INFO->nome_arquivo);
-                    printf("linha: %d; coluna: %d\n", INFO->lin, INFO->col);
-                    printf("posicao salva - linha: %d; coluna: %d\n", INFO->lin_M, INFO->col_M);
-                    printf("numero de linhas: %d\n\n", INFO->n_linhas);
+                    informacao();// ver FUNCOES_PROGRAMA.h
 
                     s = "";
                     break;
@@ -408,12 +403,13 @@ void Iteracao_do_Programa(){
             }
 
         }while(strlen(s) > 0);
-        imprimeLinhaAtual(INFO);
+        imprimeLinhaAtual(linha_atual, col, col_M);
 
     }
     
-    free(s);
-    fechaPrograma(INFO);
+    free(s);// libera a string s
+    free(linha_aux);// libera linha auxiliar
+    fechaPrograma();// libera a pilha e a lista lista ligada (texto)
     
 }
 
@@ -422,8 +418,8 @@ void Iteracao_do_Programa(){
 int main(){
 
     
-    fazabertura();
-    Iteracao_do_Programa();
+    fazabertura();// chama a abertura
+    Iteracao_do_Programa();// realiza o loop do programa ate ser dado o comando '!'
     
     
 
