@@ -55,7 +55,7 @@ void fechaPrograma(){// libera a memoria alocada pelo texto e pela pilha
 void Iteracao_do_Programa(){
 
     //VARAIVEIS AUXILIARES USADAS NO PROGRAMA
-    char * s; char * s_aux_1; char * s_aux_2; char * s_aux_3;
+    char * s; char * s_aux_1; char * s_aux_2; char * s_aux_3; char * s_aux_4;
     char comando = '0';
     int fecha = 0; int salva = 0;
     int aux_1, aux_2, aux_3;
@@ -307,15 +307,30 @@ void Iteracao_do_Programa(){
 
                 case 'S'://(Ss/r) SUBSTITUI A STRING s PELA STRING r EM TODO O TEXTO 
 
+                    //separa as palavras
+                    aux_3 = buscaLinha("/", s);
+                    s_aux_1 = copiaString(0, aux_3, s);
+                    s_aux_2 = copiaString(aux_3 + 1, strlen(s), s);
+                    
+                    //substitui
+                    linha_aux = cabeca;
+                    aux_2 = 0;
 
-                    s_aux_1 = strstr(s,"/");
-                    aux_1 = s_aux_1 - s;
-                    s_aux_2 = copiaString(0, aux_1, s);
-                    s_aux_3 = copiaString(aux_1 + 1, strlen(s), s);
+                  
+
+                    aux_1 = buscaLinha(s_aux_1, linha_aux->lin);
+                    while(aux_1 != -1){
+                        s_aux_3 = copiaString(0, aux_1, linha_atual->lin);
+                        s_aux_3 = somaStrings(s_aux_3, s_aux_2);
+                        s_aux_4 = copiaString(aux_1 + strlen(s_aux_1), strlen(linha_atual->lin), linha_atual->lin);
+                        linha_aux->lin = somaStrings(s_aux_3, s_aux_4);
+                        aux_1 = buscaLinha(s_aux_1, linha_aux->lin);
+                    }
+
                     
-                    printf("%s %s\n", s_aux_2, s_aux_3);
-                    
-                    
+                     
+
+
                     s = "";
                     break;
                 
