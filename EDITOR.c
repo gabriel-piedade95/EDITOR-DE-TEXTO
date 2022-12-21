@@ -18,7 +18,7 @@ void fazabertura() {// faz abertura do programa com algumas informacoes
 }
 
 //IMPRIME LINHA ATUAL 
-void imprimeLinhaAtual(struct linha * linha_atual, int col, int col_M){
+void imprimeLinhaAtual(struct linha * linha_atual, int col, int col_M, int lin, int lin_M, int salva){
     
     int i;
     if(linha_atual == NULL){// se a linha for nula pular linha
@@ -35,7 +35,7 @@ void imprimeLinhaAtual(struct linha * linha_atual, int col, int col_M){
             s[i] = ' ';// cria uma string com espacos ' '
         }
         s[linha_atual->tam+2] = '\0';
-        s[col_M] = 'M';// coloca M na posicao anterior
+        if (salva == 1 && lin == lin_M) s[col_M] = 'M';// coloca M na posicao anterior
         s[col] = '^';// coloca ^ na posica do ponteiro
         printf("%s\n\n", s);// imprime a linha de baixo com o ponteiro e a posicao anterior
     }
@@ -57,7 +57,7 @@ void Iteracao_do_Programa(){
     //VARAIVEIS AUXILIARES USADAS NO PROGRAMA
     char * s; char * s_aux_1; char * s_aux_2;
     char comando = '0';
-    int fecha = 0; 
+    int fecha = 0; int salva = 0;
     int aux_1, aux_2, aux_3;
     struct linha * linha_aux;
     
@@ -65,6 +65,7 @@ void Iteracao_do_Programa(){
     //INFORMACOES DO PROGRAMA
     int lin = 0;
     int col = 0;
+    int lin_M = 0;
     int n_linhas = 0;
     int col_M = 0;
     char * nome_arquivo = NULL;
@@ -218,6 +219,9 @@ void Iteracao_do_Programa(){
 
                 case 'D'://DELETA UM CARACTERE
 
+                    if(col == linha_atual->tam){// protege a ultima posicao da string
+                        break;
+                    }
                     strcpy(linha_atual->lin, revomeCarectere(linha_atual, col));// ver FUNCOES_PROGRAMA.h
                     linha_atual->tam--;
 
@@ -226,6 +230,8 @@ void Iteracao_do_Programa(){
                 case 'M': //SALVA A POSICAO ATUAL
 
                     col_M = col;
+                    lin_M = lin;
+                    salva = 1;
 
                     break;
 
@@ -281,18 +287,20 @@ void Iteracao_do_Programa(){
                     aux_3 = -1;
                     aux_2 = buscaTexto(s, &aux_3, lin);// a funcao buscaTexto() encontra a proxima ocorrencia de s no texto e devolve a linha da palavra
                     
-                    
+                    printf("%d %d\n", aux_2, aux_3);
                     if(aux_3 >=  col && aux_2 >= lin){// se a palavra estiver em outra linha para frente ou mais adiante na coluna movemos o ponteiro
-
-                        col = aux_3;// poiscao da coluna
+ 
 
                         while(lin < aux_2){// move ate achar a linha
                             linha_atual = linha_atual->prox;
                             lin++;
                             if(lin == n_linhas -1){
+
                                     break;
                                 }
                         }
+                        
+                        col = aux_3;// poiscao da coluna
                     }
                     
                     
@@ -403,7 +411,7 @@ void Iteracao_do_Programa(){
             }
 
         }while(strlen(s) > 0);
-        imprimeLinhaAtual(linha_atual, col, col_M);
+        imprimeLinhaAtual(linha_atual, col, col_M, lin, lin_M, salva);
 
     }
     

@@ -172,6 +172,8 @@ char * revomeCarectere(struct linha * linha_atual, int col){// remove caractere 
     char * nova_s = malloc(sizeof (char) * (linha_atual->tam - 1));
     int pos = 0;
     int aux = 0;
+    
+    
     //copia string ate a posicao do caractere
     while(pos < col){
         
@@ -249,7 +251,7 @@ char * insereString(int col, struct linha * linha_atual, char * s){// insere str
     return aux2;
 }
 
-/******************************************/
+
 
 int buscaLinha (char * p, char * t) // busca palavra na linha e retorna a coluna
 {
@@ -283,7 +285,7 @@ int buscaTexto(char * s, int * achou, int lin){// busca palavra no texto e retor
         }
         l++;
     }
-    
+    //free(l_aux);
 
     return l;
 }
@@ -320,7 +322,7 @@ void substituiStringLinha(char ** s, char * a, char * b){// substitui a por b na
     
 }
 
-
+/******************************************/
 
 void informacao(){// imprime informacao sobre os comandos do editor
 

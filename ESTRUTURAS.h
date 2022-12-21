@@ -180,14 +180,15 @@ char * Desempilha(){
 
 void mostraPilha(){
 
-    
+    int i = 0;
     if(topo != NULL){
 
         struct noh * aux = topo;
         while(aux != NULL){
 
-            printf("%s\n", aux->lin);
+            printf("pos %d: %s\n", i, aux->lin);
             aux = aux->prox;
+            i++;
 
         }
         
