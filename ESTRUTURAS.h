@@ -200,6 +200,7 @@ void apagaPilha(){
     while(topo != NULL){
         Desempilha();
     }
+    
 }
 
 /* *********************************** */

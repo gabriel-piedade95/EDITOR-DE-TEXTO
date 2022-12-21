@@ -283,25 +283,23 @@ void Iteracao_do_Programa(){
 
 
                 case 'B'://BUSCA PALAVRA NO TEXTO
-    
-                    aux_3 = -1;
-                    aux_2 = buscaTexto(s, &aux_3, lin);// a funcao buscaTexto() encontra a proxima ocorrencia de s no texto e devolve a linha da palavra
-                    
-                    printf("%d %d\n", aux_2, aux_3);
-                    if(aux_3 >=  col && aux_2 >= lin){// se a palavra estiver em outra linha para frente ou mais adiante na coluna movemos o ponteiro
- 
 
-                        while(lin < aux_2){// move ate achar a linha
-                            linha_atual = linha_atual->prox;
-                            lin++;
-                            if(lin == n_linhas -1){
-
-                                    break;
-                                }
-                        }
+                    linha_aux = linha_atual;
+                    s_aux_1 = strstr(linha_aux->lin, s);
+                    aux_2 = lin;
+                    while(s_aux_1 == NULL && aux_2 <= n_linhas - 1){
+                        linha_aux = linha_aux->prox;
+                        aux_2++;
+                        s_aux_1 = strstr(linha_aux->lin, s);
                         
-                        col = aux_3;// poiscao da coluna
                     }
+
+                    if(s_aux_1 != NULL){
+                        col = s_aux_1 - linha_aux->lin;
+                        lin = aux_2;
+                        linha_atual = linha_aux;
+                    }
+                    
                     
                     
                     s = "";

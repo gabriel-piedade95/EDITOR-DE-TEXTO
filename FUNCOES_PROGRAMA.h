@@ -253,49 +253,50 @@ char * insereString(int col, struct linha * linha_atual, char * s){// insere str
 
 
 
-int buscaLinha (char * p, char * t) // busca palavra na linha e retorna a coluna
+int buscaLinha (char * p, char * t, int inicio) // busca palavra na linha e retorna a coluna
 {
    
-   int i, k;
-   int m = strlen(p);
-   int n = strlen(t);
+    char *p1, *p2, *p3;
+    int i = 0, j = 0, achou = -1;
 
-   for (k = 0; k <= n-m; ++k) {// percorre a linha
-      for (i = 0; i < m && p[i] == t[i+k]; i++); // percorre as palavras da linha
-      if (i == m) {
-        return k;
+    p1 = p;
+    p2 = t;
+
+  for(i = 0; i<strlen(t); i++)
+  {
+    if(*p1 == *p2)
+      {
+          p3 = p1;
+          for(j = 0;j<strlen(p);j++)
+          {
+            if(*p3 == *p2)
+            {
+              p3++;p2++;
+            } 
+            else
+              break;
+          }
+          p2 = p;
+          if(j == strlen(p))
+          {
+            achou = 1;
+            
+          }
       }
-   }
-
-   return -1;
+    p1++; 
+  }
+  
+  return achou;
    
 }
 
-int buscaTexto(char * s, int * achou, int lin){// busca palavra no texto e retorna a linha
-
-    struct linha * l_aux = cabeca;// inicio do texto
-    int l = lin;
-
-    while(l_aux != NULL){// loop para percorrer o texto
-        *achou = buscaLinha(s, l_aux->lin); // busca palavra na linha
-        l_aux = l_aux->prox;
-        
-        if (*achou != -1){
-            break;
-        }
-        l++;
-    }
-    //free(l_aux);
-
-    return l;
-}
 
 void separaString(char * s, char ** aux1, char ** aux2){// separa a stirng s em duas strings separadas por '/'
 
     int tam_s = strlen(s);
     int pos;
 
-    pos = buscaLinha("/", s);
+    pos = buscaLinha("/", s, 0);
     *aux1 = copiaString(0, pos, s);
     *aux2 = copiaString(pos + 1, tam_s, s);
 
@@ -305,7 +306,7 @@ void separaString(char * s, char ** aux1, char ** aux2){// separa a stirng s em 
 void substituiStringLinha(char ** s, char * a, char * b){// substitui a por b na string s
 
     
-    int pos = buscaLinha(a, *s);// busca posica da palavra a na linha s
+    int pos = buscaLinha(a, *s, 0);// busca posica da palavra a na linha s
     char * aux1;
 
     while(pos != -1){// enquanto tiver a palavra a na linha ela sera substituida
@@ -315,7 +316,7 @@ void substituiStringLinha(char ** s, char * a, char * b){// substitui a por b na
 
         strcpy(aux1, somaStrings(aux1, b));
         strcpy(*s, somaStrings(aux1, *s));
-        pos = buscaLinha(a, *s);
+        pos = buscaLinha(a, *s, 0);
         
     }
 
