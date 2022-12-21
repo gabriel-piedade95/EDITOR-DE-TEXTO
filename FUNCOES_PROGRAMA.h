@@ -14,12 +14,12 @@ char * le_Entrada(){
         if (tam + 1 >= s)
         {
             s = s * 2 + 1;
-            string = realloc(string, sizeof(char)*s);
+            string = realloc(string, sizeof(char)*s - 1);
         }
         string[tam++] = letra;
     }
     if (string != NULL) {
-        string[tam] = '\0';
+        string[tam++] = '\0';
         return string;
     }
 
@@ -169,7 +169,7 @@ int inicioPalavra(struct info * I){
 
 char * revomeCarectere(struct info * I){
 
-    char * nova_s = malloc(sizeof (char) * I->linha_atual->tam );
+    char * nova_s = malloc(sizeof (char) * I->linha_atual->tam);
     int pos = 0;
     int aux = 0;
     while(pos < I->col){
@@ -191,7 +191,7 @@ char * revomeCarectere(struct info * I){
 char * copiaString(int inicio, int fim, char * s){
 
 
-    char * nova_s = malloc(sizeof (char) * (fim - inicio));
+    char * nova_s = malloc(sizeof (char) * (fim - inicio) + 1);
     int i;
     for (i = 0; i < (fim - inicio); i++){
         nova_s[i] = s[i + inicio];
@@ -204,7 +204,7 @@ char * copiaString(int inicio, int fim, char * s){
 
 char * somaStrings(char * s1, char * s2){
 
-    char * nova_s = malloc(sizeof (char) * (strlen(s1) + strlen(s2) - 1));
+    char * nova_s = malloc(sizeof (char) * (strlen(s1) + strlen(s2)) -1);
     int i = 0;
     int j = 0;
 
@@ -295,27 +295,27 @@ void separaString(char * s, char ** aux1, char ** aux2){
 }
 
 
-char * substituiStringLinha(struct info * I, char * a, char * b){
+void substituiStringLinha(char ** s, char * a, char * b){
 
-    char * s = I->linha_atual->lin;
-    int pos = buscaLinha(a, s);
+    
+    int pos = buscaLinha(a, *s);
+    char * aux1;
 
-    if(pos != -1){
-        char * aux1 = copiaString(0, pos, s);
-        char * aux2 = copiaString(pos + strlen(a), strlen(s), s);
+    while(pos != -1){
 
-        
+        aux1 = copiaString(0, pos, *s);
+        *s = copiaString(pos + strlen(a), strlen(*s), *s);
 
         strcpy(aux1, somaStrings(aux1, b));
-        strcpy(aux2, somaStrings(aux1, aux2));
+        strcpy(*s, somaStrings(aux1, *s));
+        pos = buscaLinha(a, *s);
         
-        return aux2;
     }
 
-    return "\0";
     
-
 }
+
+
 
 void informacao(){
 

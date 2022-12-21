@@ -249,6 +249,17 @@ struct info * iniciaINFO(){
 
 void liberaINFO(struct info * I){
 
+    struct linha * aux = cabeca;
+    struct linha * temp;
+    while(aux != NULL){
+        temp = aux;
+        aux = aux->prox;
+        free(temp);
+
+    }
+    free(I->nome_arquivo);
+    free(cabeca);
+    free(aux);
     free(I);
     return;
 }

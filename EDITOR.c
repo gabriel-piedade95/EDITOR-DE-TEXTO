@@ -12,8 +12,9 @@ void fazabertura() {
 	printf("*            ***      *EDITOR DE TEXTO*      ***               *\n");
     printf("*                                                              *\n");
 	printf("****************************************************************\n");
-    printf("by GABRIEL PIEDADE - nUSP8927356\nAperte ? para ver a lista de comandos\n");
-	printf("\n");
+    printf("GABRIEL PIEDADE - nUSP8927356\n");
+    printf("Aperte ? para ver a lista de comandos\n\n");
+
 }
 
 
@@ -43,9 +44,10 @@ void imprimeLinhaAtual(struct info * I){
 }
 void fechaPrograma(struct info * I){
     
+    apagaTexto();
     liberaINFO(I);
     apagaPilha();
-    apagaTexto();
+    
 
 }
 
@@ -54,11 +56,11 @@ void fechaPrograma(struct info * I){
 void Iteracao_do_Programa(){
 
 
-    char * s; char * s_aux_1; char * s_aux_2; char * s_aux_3;
+    char * s; char * s_aux_1; char * s_aux_2;
     char comando = '0';
     int fecha = 0; int aux_1, aux_2, aux_3;
     struct info * INFO = iniciaINFO();
-    
+    struct linha * linha_aux;
     INFO->linha_atual = cabeca;
 
     while(!fecha){
@@ -85,10 +87,11 @@ void Iteracao_do_Programa(){
                     if(INFO->nome_arquivo == NULL){
                         insereLinhaFim(s);
                         INFO->linha_atual = cabeca;
+                        INFO->linha_atual->tam = strlen(s);
                     }
                     else{
                         strcpy(INFO->linha_atual->lin, insereString(INFO, s));
-                        INFO->linha_atual->tam = INFO->linha_atual->tam + strlen(s) - 1;
+                        INFO->linha_atual->tam = INFO->linha_atual->tam + strlen(s);
                         
                     }
 
@@ -225,11 +228,11 @@ void Iteracao_do_Programa(){
 
                     if(topo != NULL){
 
-                        s_aux_3 = Desempilha();
-                        if(s_aux_3 != NULL){
+                        s_aux_2 = Desempilha();
+                        if(s_aux_2 != NULL){
 
-                            strcpy(INFO->linha_atual->lin, insereString(INFO, s_aux_3));
-                            INFO->linha_atual->tam = INFO->linha_atual->tam + strlen(s_aux_3) - 1;
+                            strcpy(INFO->linha_atual->lin, insereString(INFO, s_aux_2));
+                            INFO->linha_atual->tam = INFO->linha_atual->tam + strlen(s_aux_2) - 1;
                         }
                         
                     }
@@ -249,7 +252,8 @@ void Iteracao_do_Programa(){
                     s = "";
                     break;
 
-                case 'X'://terminar...
+                case 'X'://EMPILHA E EXCLUI
+
 
                     if(INFO->col_M > INFO->col){
                         Empilha(copiaString(INFO->col_M, INFO->linha_atual->tam ,INFO->linha_atual->lin));
@@ -265,7 +269,6 @@ void Iteracao_do_Programa(){
                     s = "";
                     break;
 
-                /**********/
 
                 case 'B'://BUSCA PALAVRA NO TEXTO
     
@@ -294,26 +297,17 @@ void Iteracao_do_Programa(){
 
                     s_aux_1 = " ";
                     s_aux_2 = " ";
-                    s_aux_3 = "\0";
-                    s_aux_3 =  realloc(s_aux_3, sizeof(char)*INFO->linha_atual->tam);
+                    
                     separaString(s, &s_aux_1, &s_aux_2);
-                    strcpy(s_aux_3, substituiStringLinha(INFO, s_aux_1, s_aux_2));
-                    printf("%s || oo \n", s_aux_3);
-                    strcpy(INFO->linha_atual->lin,substituiStringLinha(INFO, s_aux_1, s_aux_2));
-                    
+                    linha_aux = cabeca;
+                    while(linha_aux != NULL){
 
-                    /*
-                    while(INFO->lin < INFO->n_linhas-1){
+                        substituiStringLinha(&linha_aux->lin, s_aux_1, s_aux_2);
+                        linha_aux->tam = linha_aux->tam + strlen(s_aux_1) - strlen(s_aux_2);
+                        linha_aux = linha_aux->prox;
 
-                        
 
-                        strcpy(INFO->linha_atual->lin, substituiStringLinha(INFO, s_aux_1, s_aux_2));
-                        INFO->linha_atual = INFO->linha_atual->prox;
-                        INFO->lin++;
-                           
                     }
-                    
-                    */
                     
                     s = "";
                     break;
@@ -418,6 +412,7 @@ void Iteracao_do_Programa(){
 
     }
     
+    free(s);
     fechaPrograma(INFO);
     
 }
