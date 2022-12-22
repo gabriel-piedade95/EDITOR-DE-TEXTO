@@ -253,13 +253,14 @@ char * insereString(int col, struct linha * linha_atual, char * s){// insere str
 
 
 
-int buscaLinha(char * p, char * t) 
+int buscaLinha(int inicio, char * p, char * t) 
 {
    int i;
    int m = strlen(p);
    int n = strlen(t);
-
-   for (int k = 0; k <= n-m; ++k) {
+   int k;
+   if(inicio > 0) inicio--;
+   for (k = inicio; k <= n-m; ++k) {
       for (i = 0; i < m && p[i] == t[i+k]; i++); 
       if (i == m) {
         return k;
@@ -293,7 +294,8 @@ void informacao(){// imprime informacao sobre os comandos do editor
     printf(":x -> Move o cursor para o inicio da linha x\n");
     printf(":F -> Move o cursor para a ultima linha do arquivo\n");
     printf("J -> Ir para proxima linha \n");
-    printf("H -> Ir para a linha anterior\n\n");
+    printf("H -> Ir para a linha anterior\n");
+    printf("M -> Marca a posicao atual do cursor\n\n");
 
     printf("MANIPULACAO STRING:\n");
     printf("Is -> Insere a string s na posicao atual do texto\n");
@@ -306,14 +308,13 @@ void informacao(){// imprime informacao sobre os comandos do editor
     printf("PILHA STRING\n");
     printf("V -> Desempilha e insere o conteudo do topo pilha na posicao atual\n");
     printf("C -> Empilha o texto entre a posicao marcada e a posicao atual \n");
-    printf("X -> Empilha o texto entre a posicao marcada e a posicao atual e o deleta\n");
-    printf("M -> Marca a posicao atual do cursor\n\n");
+    printf("X -> Empilha o texto entre a posicao marcada e a posicao atual e o deleta\n\n");
+    
 
 
     printf("PROGRAMA:\n");
     printf("Z -> Exibe a pilha de memoria\n");
     printf("W -> Imprime versao atual do texto\n");
-    printf("K -> Imprime informacoes sobre o texto\n\n\n");
-    printf("! -> Encerra o programa\n");
+    printf("! -> Encerra o programa\n\n");
 
 }

@@ -9,11 +9,11 @@ void fazabertura() {// faz abertura do programa com algumas informacoes
 
 	printf("****************************************************************\n");
     printf("*                                                              *\n");
-	printf("*            ***      *EDITOR DE TEXTO*      ***               *\n");
+	printf("*            ***      ~EDITOR DE TEXTO~      ***               *\n");
     printf("*                                                              *\n");
 	printf("****************************************************************\n");
-    printf("GABRIEL PIEDADE - nUSP8927356\n");
-    printf("Aperte ? para ver a lista de comandos\n\n");
+    printf("> GABRIEL PIEDADE - nUSP8927356 <\n");
+    printf("> Aperte ? para ver a lista de comandos< \n\n");
 
 }
 
@@ -285,14 +285,14 @@ void Iteracao_do_Programa(){
                 case 'B'://BUSCA PALAVRA NO TEXTO
 
                     
-                    aux_1 = buscaLinha(s, linha_atual->lin);
+                    aux_1 = buscaLinha(col, s, linha_atual->lin);
                     linha_aux = linha_atual;
                     aux_2 = lin;
                     while(aux_1 == -1 && aux_2 < n_linhas -1){
 
                         linha_aux = linha_aux->prox;
                         aux_2++;
-                        aux_1 = buscaLinha(s, linha_aux->lin);
+                        aux_1 = buscaLinha(0, s, linha_aux->lin);
                     }
 
                     if(aux_1 != -1){
@@ -308,7 +308,7 @@ void Iteracao_do_Programa(){
                 case 'S'://(Ss/r) SUBSTITUI A STRING s PELA STRING r EM TODO O TEXTO 
 
                     //separa as palavras
-                    aux_3 = buscaLinha("/", s);
+                    aux_3 = buscaLinha(0, "/", s);
                     s_aux_1 = copiaString(0, aux_3, s);
                     s_aux_2 = copiaString(aux_3 + 1, strlen(s), s);
                     
@@ -318,13 +318,13 @@ void Iteracao_do_Programa(){
 
                   
 
-                    aux_1 = buscaLinha(s_aux_1, linha_aux->lin);
+                    aux_1 = buscaLinha(0, s_aux_1, linha_aux->lin);
                     while(aux_1 != -1){
                         s_aux_3 = copiaString(0, aux_1, linha_atual->lin);
                         s_aux_3 = somaStrings(s_aux_3, s_aux_2);
                         s_aux_4 = copiaString(aux_1 + strlen(s_aux_1), strlen(linha_atual->lin), linha_atual->lin);
                         linha_aux->lin = somaStrings(s_aux_3, s_aux_4);
-                        aux_1 = buscaLinha(s_aux_1, linha_aux->lin);
+                        aux_1 = buscaLinha(0, s_aux_1, linha_aux->lin);
                     }
 
                     
@@ -338,7 +338,7 @@ void Iteracao_do_Programa(){
                 case 'N'://SEPARA A LINHA 
 
                     insereLinha(linha_atual, copiaString(col + 1, linha_atual->tam, linha_atual->lin));// insere essa string em uma nova linha
-                    strcpy(linha_atual->lin, copiaString(0, col + 1, linha_atual->lin)); // copia a string a partir do ponteiro
+                    strcpy(linha_atual->lin, copiaString(0, col + 1, linha_atual->lin)); // copia a string a partir ate o ponteiro
                     linha_atual->tam = (linha_atual->tam - col + 1);
                     n_linhas++;
 
@@ -346,9 +346,14 @@ void Iteracao_do_Programa(){
 
                 case 'U'://UNE LINHA ATUAL COM A PROXIMA
 
-                    strcpy(linha_atual->lin, somaStrings(linha_atual->lin, linha_atual->prox->lin));// une a linha atual com a linha de baixo
-                    removeLinha(linha_atual->prox);// remove a linha de baixo
-                    n_linhas--;
+                    if(linha_atual->prox != NULL){
+
+                        strcpy(linha_atual->lin, somaStrings(linha_atual->lin, linha_atual->prox->lin));// une a linha atual com a linha de baixo
+                        removeLinha(linha_atual->prox);// remove a linha de baixo
+                        n_linhas--;
+
+                    }
+                    
 
                     break;
                 
