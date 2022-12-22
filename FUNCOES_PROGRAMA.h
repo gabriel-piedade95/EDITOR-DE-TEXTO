@@ -259,7 +259,7 @@ int buscaLinha(int inicio, char * p, char * t)
    int m = strlen(p);
    int n = strlen(t);
    int k;
-   if(inicio > 0) inicio--;
+   
    for (k = inicio; k <= n-m; ++k) {
       for (i = 0; i < m && p[i] == t[i+k]; i++); 
       if (i == m) {

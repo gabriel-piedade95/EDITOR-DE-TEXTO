@@ -316,19 +316,20 @@ void Iteracao_do_Programa(){
                     linha_aux = cabeca;
                     aux_2 = 0;
 
-                  
+                    while(aux_2 < n_linhas -1){
 
-                    aux_1 = buscaLinha(0, s_aux_1, linha_aux->lin);
-                    while(aux_1 != -1){
-                        s_aux_3 = copiaString(0, aux_1, linha_atual->lin);
-                        s_aux_3 = somaStrings(s_aux_3, s_aux_2);
-                        s_aux_4 = copiaString(aux_1 + strlen(s_aux_1), strlen(linha_atual->lin), linha_atual->lin);
-                        linha_aux->lin = somaStrings(s_aux_3, s_aux_4);
                         aux_1 = buscaLinha(0, s_aux_1, linha_aux->lin);
-                    }
+                        while(aux_1 != -1){
+                            s_aux_3 = somaStrings(copiaString(0, aux_1, linha_aux->lin), s_aux_2);
+                            s_aux_4 = somaStrings(s_aux_3,  copiaString(aux_1 + strlen(s_aux_2), strlen(linha_aux->lin), linha_aux->lin));
+                            strcpy(linha_aux->lin, s_aux_4);
+                            aux_1 = buscaLinha(0, s_aux_1, linha_aux->lin);
+                            
+                        }
+                        aux_2++;
+                        linha_aux = linha_aux->prox;
 
-                    
-                     
+                    }
 
 
                     s = "";
